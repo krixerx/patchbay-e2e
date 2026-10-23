@@ -36,10 +36,12 @@ Each step is recorded instead of thrown. `Patchbay.ensurePublished(slug)` fails 
 
 - An integration is a draft in `patchbay/package/services/<slug>.json` that names payload definitions in `patchbay/package/entities/`. It calls a swagger operation (`contract` + `operationId`, and `SetupTest` checks method/path against the imported contract). That operation is stubbed in `mock/mappings/<api>/*.json` and described in `mock/__files/openapi/<api>.yaml`. Keep all four consistent when adding one.
 - Echo stubs answer the received body under `received`/`update`/`user`, so response mapping is tested with the data Patchbay itself sent. In WireMock templates write `{{{request.body}}} }` with a space; `}}}}` breaks Handlebars.
-- `patchbay/docs-package` holds document integrations in a **proposed** design Patchbay does not support yet: a `blob` field type, held inside Patchbay as `{"contentType","fileName","size","data":"<base64>"}`, accepted and sent as raw body, multipart or base64 JSON on both sides (`formats.request` `binary`/`multipart`, `formats.output` `binary`, `$body` for a whole-body answer, `<blob>.data|fileName|contentType|size` in links, limit `mapper.max-blob-bytes` → 413). It is a separate package because Patchbay refuses a whole import when one file is invalid. `DocumentsTest`'s class comment is the caller-side contract.
+- `patchbay/docs-package` holds the document integrations of Patchbay's D-29 (in `../JustDoIntegration/docs/slice-plan.md`): a `blob` field type, held inside Patchbay as `{"contentType","fileName","size","data":"<base64>"}`, accepted and sent as raw body, multipart or base64 JSON on both sides (`formats.request` `binary`/`multipart`, `formats.output` `binary`, `$body` for a whole-body answer, `<blob>.data|fileName|contentType|size` in links, limit `mapper.max-blob-bytes` → 413). It stays a separate package so a document problem can't block the import of everything else. `DocumentsTest`'s class comment is the caller-side contract.
+- WireMock's `multipartPatterns` with `"matchingType": "ALL"` requires every part to match; use `ANY` to ask for one part.
 - `LargePayloadTest` and `DocumentsTest` repeat the formulas of `tools/GenerateFixtures.java`; change both together.
 - `PatchbayTest` clears WireMock's journal before every test, so tests must not run in parallel.
+- From the Windows host, call the containers at `127.0.0.1`: Docker Desktop's IPv6 forwarding for `localhost` can stop answering (the JUnit client uses IPv4 and is not affected).
 
 ## Known Patchbay findings (failing on purpose)
 
-- No binary/multipart support (`DocumentsTest`, `SetupTest` docs-package rows).
+None at the moment: all 178 tests pass against Patchbay `console/foundation` (up to the multipart commit). Fixed so far: outbound retries and cookies (OV-8), files as blobs (D-29).

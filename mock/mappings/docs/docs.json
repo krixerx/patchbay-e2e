@@ -7,7 +7,7 @@
         "urlPath": "/docs/v1/documents",
         "headers": { "Content-Type": { "contains": "multipart/form-data" } },
         "multipartPatterns": [
-          { "matchingType": "ALL", "headers": { "Content-Disposition": { "contains": "name=\"file\"" } } }
+          { "matchingType": "ANY", "headers": { "Content-Disposition": { "contains": "name=\"file\"" } } }
         ]
       },
       "response": {
