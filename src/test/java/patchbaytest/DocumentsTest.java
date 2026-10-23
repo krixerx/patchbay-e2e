@@ -204,7 +204,7 @@ class DocumentsTest extends PatchbayTest {
                 Map.of("fileName", "x.pdf", "contentType", "application/pdf", "data", "not base64 !!!"))));
 
         assertThat(r.status()).isEqualTo(400);
-        assertThat(r.json().path("problems").toString()).contains("file");
+        assertThat(r.json().path("problems").toString()).contains("file.data: must be base64");
         assertThat(Mock.total()).isZero();
     }
 
