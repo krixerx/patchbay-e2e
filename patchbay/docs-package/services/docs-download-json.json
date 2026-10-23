@@ -1,0 +1,10 @@
+{
+  "id": "docs-download-json",
+  "contract": "docs",
+  "operationId": "downloadDocument",
+  "input": "document-id",
+  "output": "document-file",
+  "target": { "connection": "docs", "method": "GET", "path": "/docs/v1/documents/{id}/content" },
+  "request": { "links": [ { "from": "dd-id", "to": "path.id" } ] },
+  "response": { "links": [ { "from": "$body", "to": "df-content" } ] }
+}

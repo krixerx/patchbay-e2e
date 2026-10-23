@@ -2,13 +2,13 @@
   "id": "docs-upload-multipart",
   "contract": "docs",
   "operationId": "uploadDocument",
-  "input": "document-file-upload",
+  "input": "document-upload",
   "output": "document-stored",
   "target": { "connection": "docs", "method": "POST", "path": "/docs/v1/documents" },
   "formats": { "request": "multipart" },
   "request": { "links": [
-    { "from": "dfu-title", "to": "body.title" },
-    { "from": "dfu-file", "to": "body.file" }
+    { "from": "dup-title", "to": "body.title" },
+    { "from": "dup-file", "to": "body.file" }
   ] },
   "response": { "links": [
     { "from": "documentId", "to": "ds-id" },

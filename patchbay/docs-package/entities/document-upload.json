@@ -1,0 +1,8 @@
+{
+  "id": "document-upload",
+  "name": "Document upload (a title and a file)",
+  "fields": [
+    { "id": "dup-title", "name": "title", "type": "text" },
+    { "id": "dup-file", "name": "file", "type": "blob", "required": true }
+  ]
+}

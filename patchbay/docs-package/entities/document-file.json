@@ -1,1 +1,1 @@
-{ "id": "document-file", "name": "Downloaded file", "fields": [ { "id": "df-content", "name": "content", "type": "binary" } ] }
+{ "id": "document-file", "name": "A file", "fields": [ { "id": "df-content", "name": "content", "type": "blob" } ] }
