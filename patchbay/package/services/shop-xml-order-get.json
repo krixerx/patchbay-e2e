@@ -1,0 +1,23 @@
+{
+  "id": "shop-xml-order-get",
+  "contract": "shop",
+  "operationId": "getXmlOrder",
+  "input": "order-id",
+  "output": "xml-order-view",
+  "target": { "connection": "shop", "method": "GET", "path": "/shop/v1/xml/orders/{orderId}" },
+  "request": { "links": [
+    { "from": "oi-orderId", "to": "path.orderId" }
+  ] },
+  "response": { "links": [
+    { "from": "id", "to": "xv-id" },
+    { "from": "currency", "to": "xv-currency" },
+    { "from": "customer.name", "to": "xv-name" },
+    { "from": "customer.email", "to": "xv-email" },
+    { "from": "paid", "to": "xv-paid" },
+    { "from": "line[]", "to": "xv-lines" },
+    { "from": "line[].no", "to": "xv-no" },
+    { "from": "line[].sku", "to": "xv-sku" },
+    { "from": "line[].qty", "to": "xv-qty" },
+    { "from": "line[].price", "to": "xv-price" }
+  ] }
+}

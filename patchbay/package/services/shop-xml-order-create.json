@@ -1,0 +1,23 @@
+{
+  "id": "shop-xml-order-create",
+  "contract": "shop",
+  "operationId": "createXmlOrder",
+  "input": "xml-order",
+  "output": "xml-confirmation",
+  "target": { "connection": "shop", "method": "POST", "path": "/shop/v1/xml/orders" },
+  "formats": { "request": "xml", "requestRoot": "Order", "output": "xml", "outputRoot": "confirmation" },
+  "request": { "links": [
+    { "from": "xo-ref", "to": "body.ref" },
+    { "from": "xo-customer", "to": "body.customer" },
+    { "from": "xo-lines", "to": "body.line[]" },
+    { "from": "xo-sku", "to": "body.line[].sku" },
+    { "from": "xo-qty", "to": "body.line[].qty" }
+  ] },
+  "response": { "links": [
+    { "from": "orderId", "to": "xc-orderId" },
+    { "from": "status", "to": "xc-status" },
+    { "from": "line[]", "to": "xc-lines" },
+    { "from": "line[].sku", "to": "xc-sku" },
+    { "from": "line[].qty", "to": "xc-qty" }
+  ] }
+}

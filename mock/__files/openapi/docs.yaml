@@ -1,0 +1,100 @@
+openapi: 3.0.3
+info:
+  title: Documents (mock)
+  version: "1.0"
+  description: Binary documents in and out, served by WireMock (mock/mappings/docs).
+servers:
+  - url: http://mock:8080
+paths:
+  /docs/v1/documents:
+    post:
+      operationId: uploadDocument
+      summary: Upload a document as multipart/form-data
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                title: { type: string }
+                file: { type: string, format: binary }
+      responses:
+        "201": { $ref: "#/components/responses/Stored" }
+  /docs/v1/documents/base64:
+    post:
+      operationId: uploadDocumentBase64
+      summary: Upload a document as JSON with base64 content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fileName: { type: string }
+                contentType: { type: string }
+                contentBase64: { type: string, format: byte }
+      responses:
+        "201": { $ref: "#/components/responses/Stored" }
+  /docs/v1/documents/{id}:
+    get:
+      operationId: getDocument
+      summary: Metadata and the content as base64 (DOC-1)
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: The document
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  documentId: { type: string }
+                  fileName: { type: string }
+                  contentType: { type: string }
+                  size: { type: integer }
+                  contentBase64: { type: string, format: byte }
+  /docs/v1/documents/{id}/content:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    get:
+      operationId: downloadDocument
+      summary: The raw content (DOC-1 a PDF, DOC-LARGE 1 MiB of binary)
+      responses:
+        "200":
+          description: The file
+          headers:
+            Content-Disposition: { schema: { type: string } }
+          content:
+            application/pdf:
+              schema: { type: string, format: binary }
+            application/octet-stream:
+              schema: { type: string, format: binary }
+    put:
+      operationId: replaceDocumentContent
+      summary: Replace the content with raw bytes
+      requestBody:
+        required: true
+        content:
+          application/pdf:
+            schema: { type: string, format: binary }
+          application/octet-stream:
+            schema: { type: string, format: binary }
+      responses:
+        "200": { $ref: "#/components/responses/Stored" }
+components:
+  responses:
+    Stored:
+      description: Stored
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              documentId: { type: string }
+              status: { type: string }
+              title: { type: string }
+              fileName: { type: string }

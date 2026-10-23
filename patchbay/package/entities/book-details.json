@@ -1,0 +1,12 @@
+{
+  "id": "book-details",
+  "name": "Book details",
+  "fields": [
+    { "id": "dt-bookId", "name": "bookId", "type": "integer" },
+    { "id": "dt-title", "name": "title", "type": "text" },
+    { "id": "dt-description", "name": "description", "type": "text" },
+    { "id": "dt-pages", "name": "pages", "type": "integer" },
+    { "id": "dt-excerpt", "name": "excerpt", "type": "text" },
+    { "id": "dt-published", "name": "published", "type": "datetime" }
+  ]
+}

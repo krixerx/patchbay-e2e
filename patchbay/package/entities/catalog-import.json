@@ -1,0 +1,19 @@
+{
+  "id": "catalog-import",
+  "name": "Catalog import (large request)",
+  "fields": [
+    { "id": "ci-supplier", "name": "supplier", "type": "text", "required": true },
+    { "id": "ci-products", "name": "products", "type": "list", "items": { "type": "object", "fields": [
+      { "id": "ci-sku", "name": "sku", "type": "text", "required": true },
+      { "id": "ci-name", "name": "name", "type": "text" },
+      { "id": "ci-price", "name": "price", "type": "number" },
+      { "id": "ci-stock", "name": "stock", "type": "integer" },
+      { "id": "ci-active", "name": "active", "type": "boolean" },
+      { "id": "ci-variants", "name": "variants", "type": "list", "items": { "type": "object", "fields": [
+        { "id": "ci-v-sku", "name": "sku", "type": "text" },
+        { "id": "ci-v-color", "name": "color", "type": "text" },
+        { "id": "ci-v-size", "name": "size", "type": "text" }
+      ] } }
+    ] } }
+  ]
+}

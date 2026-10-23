@@ -1,0 +1,1 @@
+{ "id": "status-code", "name": "Status code", "fields": [ { "id": "sc-code", "name": "code", "type": "integer", "required": true } ] }

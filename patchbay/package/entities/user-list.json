@@ -1,0 +1,12 @@
+{
+  "id": "user-list",
+  "name": "User list",
+  "fields": [
+    { "id": "ul-users", "name": "users", "type": "list", "items": { "type": "object", "fields": [
+      { "id": "ul-id", "name": "userId", "type": "integer" },
+      { "id": "ul-name", "name": "name", "type": "text" },
+      { "id": "ul-email", "name": "email", "type": "text" },
+      { "id": "ul-status", "name": "status", "type": "text" }
+    ] } }
+  ]
+}

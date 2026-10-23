@@ -1,0 +1,10 @@
+{
+  "id": "message",
+  "name": "Message with headers",
+  "fields": [
+    { "id": "msg-text", "name": "message", "type": "text", "required": true },
+    { "id": "msg-priority", "name": "priority", "type": "integer" },
+    { "id": "msg-correlation", "name": "correlationId", "type": "text" },
+    { "id": "msg-tenant", "name": "tenant", "type": "text" }
+  ]
+}

@@ -1,0 +1,7 @@
+[
+  { "id": 1, "title": "Book 1", "description": "First", "pageCount": 100, "excerpt": "E1", "publishDate": "2026-01-01T00:00:00Z" },
+  { "id": 2, "title": "Book 2", "description": "Second", "pageCount": 200, "excerpt": "E2", "publishDate": "2026-02-01T00:00:00Z" },
+  { "id": 3, "title": "Book 3", "description": "Third", "pageCount": 300, "excerpt": "E3", "publishDate": "2026-03-01T00:00:00Z" },
+  { "id": 4, "title": "Book 4", "description": null, "pageCount": 400, "excerpt": "E4", "publishDate": "2026-04-01T00:00:00Z" },
+  { "id": 5, "title": "Book 5", "pageCount": 500, "excerpt": "E5", "publishDate": "2026-05-01T00:00:00Z" }
+]

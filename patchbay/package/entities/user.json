@@ -1,0 +1,11 @@
+{
+  "id": "user",
+  "name": "User",
+  "fields": [
+    { "id": "us-id", "name": "userId", "type": "integer" },
+    { "id": "us-name", "name": "name", "type": "text" },
+    { "id": "us-email", "name": "email", "type": "text" },
+    { "id": "us-gender", "name": "gender", "type": "text" },
+    { "id": "us-status", "name": "status", "type": "text" }
+  ]
+}

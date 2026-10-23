@@ -1,0 +1,100 @@
+openapi: 3.0.3
+info:
+  title: GoREST Users (mock)
+  version: "2.0"
+  description: Stand-in for https://gorest.co.in users, served by WireMock (mock/mappings/users). Writes need the bearer token gorest-test-token.
+servers:
+  - url: http://mock:8080
+security:
+  - bearer: []
+paths:
+  /public/v2/users:
+    get:
+      operationId: searchUsers
+      summary: Search users (no token needed)
+      security: []
+      parameters:
+        - { name: name, in: query, schema: { type: string } }
+        - { name: status, in: query, schema: { type: string, enum: [active, inactive] } }
+        - { name: page, in: query, schema: { type: integer } }
+        - { name: per_page, in: query, schema: { type: integer } }
+      responses:
+        "200":
+          description: A bare array of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/User" }
+    post:
+      operationId: createUser
+      summary: Create a user; taken@example.com answers 422
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/NewUser" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/User" }
+        "401": { description: Missing or wrong token }
+        "422":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    field: { type: string }
+                    message: { type: string }
+  /public/v2/users/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: integer } }
+    put:
+      operationId: updateUser
+      summary: Update a user; echoes the body under "user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/NewUser" }
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: integer }
+                  user: { $ref: "#/components/schemas/NewUser" }
+    delete:
+      operationId: deleteUser
+      summary: Delete a user; 204 without a body
+      security: []
+      responses:
+        "204": { description: Deleted }
+components:
+  securitySchemes:
+    bearer: { type: http, scheme: bearer }
+  schemas:
+    NewUser:
+      type: object
+      properties:
+        name: { type: string }
+        email: { type: string, format: email }
+        gender: { type: string, enum: [male, female] }
+        status: { type: string, enum: [active, inactive] }
+    User:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string, format: email }
+        gender: { type: string }
+        status: { type: string }

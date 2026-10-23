@@ -1,0 +1,25 @@
+{
+  "id": "shop-catalog-list",
+  "contract": "shop",
+  "operationId": "listCatalog",
+  "input": "catalog-query",
+  "output": "catalog",
+  "target": { "connection": "shop", "method": "GET", "path": "/shop/v1/catalog" },
+  "request": { "links": [
+    { "from": "cq-category", "to": "query.category" }
+  ] },
+  "response": { "links": [
+    { "from": "total", "to": "ca-total" },
+    { "from": "page", "to": "ca-page" },
+    { "from": "products[]", "to": "ca-products" },
+    { "from": "products[].sku", "to": "ca-sku" },
+    { "from": "products[].name", "to": "ca-name" },
+    { "from": "products[].pricing.amount", "to": "ca-price" },
+    { "from": "products[].pricing.currency", "to": "ca-currency" },
+    { "from": "products[].stock.available", "to": "ca-available" },
+    { "from": "products[].variants[]", "to": "ca-variants" },
+    { "from": "products[].variants[].sku", "to": "ca-v-sku" },
+    { "from": "products[].variants[].attrs.color", "to": "ca-v-color" },
+    { "from": "products[].variants[].attrs.size", "to": "ca-v-size" }
+  ] }
+}

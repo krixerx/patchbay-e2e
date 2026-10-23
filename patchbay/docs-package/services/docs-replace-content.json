@@ -1,0 +1,17 @@
+{
+  "id": "docs-replace-content",
+  "contract": "docs",
+  "operationId": "replaceDocumentContent",
+  "input": "document-content",
+  "output": "document-stored",
+  "target": { "connection": "docs", "method": "PUT", "path": "/docs/v1/documents/{id}/content" },
+  "formats": { "request": "binary" },
+  "request": { "links": [
+    { "from": "dc-id", "to": "path.id" },
+    { "from": "dc-content", "to": "body" }
+  ] },
+  "response": { "links": [
+    { "from": "documentId", "to": "ds-id" },
+    { "from": "status", "to": "ds-status" }
+  ] }
+}

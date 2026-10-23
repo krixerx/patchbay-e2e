@@ -1,0 +1,15 @@
+{
+  "id": "broken-links",
+  "contract": "shop",
+  "operationId": "createOrder",
+  "input": "order-request",
+  "output": "ok",
+  "target": { "connection": "shop", "method": "POST", "path": "/shop/v1/orders" },
+  "request": { "links": [
+    { "from": "so-sku", "to": "body.items[].sku" },
+    { "from": "so-lines", "to": "body.line" },
+    { "from": "so-ref", "to": "body.refs[]" },
+    { "from": "so-gone", "to": "body.x" }
+  ] },
+  "response": { "links": [ { "from": "ok", "to": "ok-ok" } ] }
+}

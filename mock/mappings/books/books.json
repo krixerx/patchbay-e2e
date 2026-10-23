@@ -1,0 +1,58 @@
+{
+  "mappings": [
+    {
+      "name": "books: list (bare array)",
+      "request": { "method": "GET", "urlPath": "/api/v1/Books" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json; charset=utf-8" },
+        "bodyFileName": "books/books.json"
+      }
+    },
+    {
+      "name": "books: get one",
+      "request": { "method": "GET", "urlPathTemplate": "/api/v1/Books/{id}" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json; charset=utf-8" },
+        "body": "{\"id\":{{request.path.id}},\"title\":\"Book {{request.path.id}}\",\"description\":\"Description of book {{request.path.id}}\",\"pageCount\":{{request.path.id}}00,\"excerpt\":\"Excerpt {{request.path.id}}\",\"publishDate\":\"2026-01-15T10:30:00Z\"}",
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "books: get unknown",
+      "priority": 1,
+      "request": { "method": "GET", "urlPath": "/api/v1/Books/404" },
+      "response": {
+        "status": 404,
+        "headers": { "Content-Type": "application/problem+json; charset=utf-8" },
+        "jsonBody": { "type": "https://tools.ietf.org/html/rfc7231#section-6.5.4", "title": "Not Found", "status": 404 }
+      }
+    },
+    {
+      "name": "books: create (answers the book with a new id)",
+      "request": { "method": "POST", "urlPath": "/api/v1/Books" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json; charset=utf-8", "X-Vendor-Secret": "must-not-reach-caller" },
+        "body": "{\"id\":4242,\"received\":{{{request.body}}} }",
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "books: update (echoes the body under the id)",
+      "request": { "method": "PUT", "urlPathTemplate": "/api/v1/Books/{id}" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json; charset=utf-8" },
+        "body": "{\"id\":{{request.path.id}},\"received\":{{{request.body}}} }",
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "books: delete (200 with an empty body, as FakeRESTApi does)",
+      "request": { "method": "DELETE", "urlPathTemplate": "/api/v1/Books/{id}" },
+      "response": { "status": 200 }
+    }
+  ]
+}

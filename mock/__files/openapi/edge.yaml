@@ -1,0 +1,127 @@
+openapi: 3.0.3
+info:
+  title: Edge cases (mock)
+  version: "1.0"
+  description: >
+    Error statuses, delays, broken connections, API keys, header echo and typed query parameters, served by WireMock
+    (mock/mappings/edge). Patchbay's outbound timeout in docker-compose.yml is 2 s.
+servers:
+  - url: http://mock:8080
+paths:
+  /edge/status:
+    get:
+      operationId: getStatus
+      summary: Answers the status given in "code" (200, 400, 401, 403, 404, 409, 422, 429, 500, 502, 503)
+      parameters:
+        - { name: code, in: query, required: true, schema: { type: integer } }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        default: { description: The requested error status with a small body }
+  /edge/slow:
+    get:
+      operationId: getSlow
+      summary: Answers after 5 s
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /edge/sluggish:
+    get:
+      operationId: getSluggish
+      summary: Answers after 0.5 s
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /edge/reset:
+    get:
+      operationId: getReset
+      summary: Resets the connection
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /edge/empty:
+    get:
+      operationId: getEmpty
+      summary: Closes the connection without answering
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /edge/garbage:
+    get:
+      operationId: getGarbage
+      summary: Sends random bytes, then closes
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /edge/malformed:
+    get:
+      operationId: getMalformed
+      summary: 200 with a body that is not valid JSON
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /edge/secure-query:
+    get:
+      operationId: getSecureQuery
+      summary: Needs api_key=edge-query-key in the query
+      security: [ { queryKey: [] } ]
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { description: Missing or wrong key }
+  /edge/secure-header:
+    get:
+      operationId: getSecureHeader
+      summary: Needs X-Api-Key edge-header-key
+      security: [ { headerKey: [] } ]
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { description: Missing or wrong key }
+  /edge/echo:
+    post:
+      operationId: postEcho
+      summary: Echoes the body and X-Correlation-Id; answers with X-Vendor-Secret and Set-Cookie headers
+      parameters:
+        - { name: X-Correlation-Id, in: header, schema: { type: string } }
+        - { name: X-Tenant, in: header, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Message" }
+      responses:
+        "200":
+          description: The echo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  received: { $ref: "#/components/schemas/Message" }
+                  correlationId: { type: string }
+  /edge/types:
+    get:
+      operationId: getTypes
+      summary: Answers the request URL, to check how typed query parameters were written
+      parameters:
+        - { name: count, in: query, schema: { type: integer } }
+        - { name: ratio, in: query, schema: { type: number } }
+        - { name: active, in: query, schema: { type: boolean } }
+        - { name: day, in: query, schema: { type: string, format: date } }
+        - { name: at, in: query, schema: { type: string, format: date-time } }
+        - { name: label, in: query, schema: { type: string } }
+        - { name: ids, in: query, explode: true, schema: { type: array, items: { type: integer } } }
+      responses:
+        "200":
+          description: The URL
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query: { type: string }
+components:
+  securitySchemes:
+    queryKey: { type: apiKey, in: query, name: api_key }
+    headerKey: { type: apiKey, in: header, name: X-Api-Key }
+  responses:
+    Ok:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok: { type: boolean }
+  schemas:
+    Message:
+      type: object
+      properties:
+        message: { type: string }
+        priority: { type: integer }

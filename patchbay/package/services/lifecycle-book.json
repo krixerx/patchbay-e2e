@@ -1,0 +1,19 @@
+{
+  "id": "lifecycle-book",
+  "contract": "fake-rest-api",
+  "operationId": "getBook",
+  "input": "book-id",
+  "output": "book-details",
+  "target": { "connection": "fake-rest-api", "method": "GET", "path": "/api/v1/Books/{id}" },
+  "request": { "links": [
+    { "from": "bk-bookId", "to": "path.id" }
+  ] },
+  "response": { "links": [
+    { "from": "id", "to": "dt-bookId" },
+    { "from": "title", "to": "dt-title" },
+    { "from": "description", "to": "dt-description" },
+    { "from": "pageCount", "to": "dt-pages" },
+    { "from": "excerpt", "to": "dt-excerpt" },
+    { "from": "publishDate", "to": "dt-published" }
+  ] }
+}

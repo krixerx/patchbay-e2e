@@ -1,0 +1,26 @@
+{
+  "mappings": [
+    { "name": "edge: ok", "request": { "method": "GET", "urlPath": "/edge/status", "queryParameters": { "code": { "equalTo": "200" } } },
+      "response": { "status": 200, "headers": { "Content-Type": "application/json" }, "jsonBody": { "ok": true } } },
+    { "name": "edge: 400", "request": { "method": "GET", "urlPath": "/edge/status", "queryParameters": { "code": { "equalTo": "400" } } },
+      "response": { "status": 400, "headers": { "Content-Type": "application/json" }, "jsonBody": { "error": "bad-request", "detail": "vendor says 400" } } },
+    { "name": "edge: 401", "request": { "method": "GET", "urlPath": "/edge/status", "queryParameters": { "code": { "equalTo": "401" } } },
+      "response": { "status": 401, "headers": { "Content-Type": "application/json", "WWW-Authenticate": "Bearer" }, "jsonBody": { "error": "unauthorized" } } },
+    { "name": "edge: 403", "request": { "method": "GET", "urlPath": "/edge/status", "queryParameters": { "code": { "equalTo": "403" } } },
+      "response": { "status": 403, "headers": { "Content-Type": "application/json" }, "jsonBody": { "error": "forbidden" } } },
+    { "name": "edge: 404", "request": { "method": "GET", "urlPath": "/edge/status", "queryParameters": { "code": { "equalTo": "404" } } },
+      "response": { "status": 404, "headers": { "Content-Type": "application/json" }, "jsonBody": { "error": "not-found" } } },
+    { "name": "edge: 409", "request": { "method": "GET", "urlPath": "/edge/status", "queryParameters": { "code": { "equalTo": "409" } } },
+      "response": { "status": 409, "headers": { "Content-Type": "application/json" }, "jsonBody": { "error": "conflict" } } },
+    { "name": "edge: 422", "request": { "method": "GET", "urlPath": "/edge/status", "queryParameters": { "code": { "equalTo": "422" } } },
+      "response": { "status": 422, "headers": { "Content-Type": "application/json" }, "jsonBody": [{ "field": "name", "message": "can't be blank" }] } },
+    { "name": "edge: 429", "request": { "method": "GET", "urlPath": "/edge/status", "queryParameters": { "code": { "equalTo": "429" } } },
+      "response": { "status": 429, "headers": { "Content-Type": "application/json", "Retry-After": "30" }, "jsonBody": { "error": "too-many-requests" } } },
+    { "name": "edge: 500", "request": { "method": "GET", "urlPath": "/edge/status", "queryParameters": { "code": { "equalTo": "500" } } },
+      "response": { "status": 500, "headers": { "Content-Type": "application/json" }, "jsonBody": { "error": "internal" } } },
+    { "name": "edge: 502", "request": { "method": "GET", "urlPath": "/edge/status", "queryParameters": { "code": { "equalTo": "502" } } },
+      "response": { "status": 502, "headers": { "Content-Type": "text/html" }, "body": "<html><body>Bad gateway</body></html>" } },
+    { "name": "edge: 503", "request": { "method": "GET", "urlPath": "/edge/status", "queryParameters": { "code": { "equalTo": "503" } } },
+      "response": { "status": 503, "headers": { "Content-Type": "text/plain" }, "body": "maintenance" } }
+  ]
+}

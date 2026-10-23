@@ -1,0 +1,1 @@
+{ "id": "catalog-query", "name": "Catalog query", "fields": [ { "id": "cq-category", "name": "category", "type": "text" } ] }

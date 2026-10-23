@@ -1,0 +1,12 @@
+{
+  "id": "xml-order",
+  "name": "Order sent as XML",
+  "fields": [
+    { "id": "xo-ref", "name": "orderRef", "type": "text", "required": true },
+    { "id": "xo-customer", "name": "customer", "type": "text" },
+    { "id": "xo-lines", "name": "lines", "type": "list", "items": { "type": "object", "fields": [
+      { "id": "xo-sku", "name": "sku", "type": "text" },
+      { "id": "xo-qty", "name": "qty", "type": "integer" }
+    ] } }
+  ]
+}

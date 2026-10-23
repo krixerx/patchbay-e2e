@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Order id="ORD-3002" currency="EUR">
+  <customer>
+    <name>Jaan Kask</name>
+    <email>jaan.kask@example.com</email>
+  </customer>
+  <paid>false</paid>
+  <line no="1">
+    <sku>XML-ONLY</sku>
+    <qty>5</qty>
+    <price>1.0</price>
+  </line>
+</Order>

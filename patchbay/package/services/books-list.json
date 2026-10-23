@@ -1,0 +1,16 @@
+{
+  "id": "books-list",
+  "contract": "fake-rest-api",
+  "operationId": "listBooks",
+  "input": "empty",
+  "output": "book-list",
+  "target": { "connection": "fake-rest-api", "method": "GET", "path": "/api/v1/Books" },
+  "request": { "links": [] },
+  "response": { "links": [
+    { "from": "[]", "to": "bl-books" },
+    { "from": "[].id", "to": "bl-bookId" },
+    { "from": "[].title", "to": "bl-title" },
+    { "from": "[].description", "to": "bl-description" },
+    { "from": "[].pageCount", "to": "bl-pages" }
+  ] }
+}

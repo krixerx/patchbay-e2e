@@ -1,0 +1,13 @@
+{
+  "id": "book-saved",
+  "name": "Saved book",
+  "fields": [
+    { "id": "bs-bookId", "name": "bookId", "type": "integer" },
+    { "id": "bs-title", "name": "title", "type": "text" },
+    { "id": "bs-summary", "name": "summary", "type": "text" },
+    { "id": "bs-pages", "name": "pages", "type": "integer" },
+    { "id": "bs-published", "name": "published", "type": "datetime" },
+    { "id": "bs-available", "name": "available", "type": "boolean" },
+    { "id": "bs-source", "name": "source", "type": "text" }
+  ]
+}

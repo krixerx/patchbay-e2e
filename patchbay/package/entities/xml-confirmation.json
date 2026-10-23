@@ -1,0 +1,12 @@
+{
+  "id": "xml-confirmation",
+  "name": "XML order confirmation",
+  "fields": [
+    { "id": "xc-orderId", "name": "orderId", "type": "text" },
+    { "id": "xc-status", "name": "status", "type": "text" },
+    { "id": "xc-lines", "name": "line", "type": "list", "items": { "type": "object", "fields": [
+      { "id": "xc-sku", "name": "sku", "type": "text" },
+      { "id": "xc-qty", "name": "qty", "type": "integer" }
+    ] } }
+  ]
+}

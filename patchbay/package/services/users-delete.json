@@ -1,0 +1,12 @@
+{
+  "id": "users-delete",
+  "contract": "gorest",
+  "operationId": "deleteUser",
+  "input": "user-id",
+  "output": "empty",
+  "target": { "connection": "gorest", "method": "DELETE", "path": "/public/v2/users/{id}" },
+  "request": { "links": [
+    { "from": "ui-id", "to": "path.id" }
+  ] },
+  "response": { "links": [] }
+}

@@ -1,0 +1,58 @@
+{
+  "data": {
+    "order": {
+      "id": "ORD-1001",
+      "createdAt": "2026-10-01T10:15:30Z",
+      "deliveryDate": "2026-10-05",
+      "paid": true,
+      "customer": {
+        "id": 501,
+        "name": { "first": "Mari", "last": "Tamm" },
+        "contact": {
+          "email": "mari.tamm@example.com",
+          "phones": [
+            { "type": "mobile", "number": "+372 5555 0001" },
+            { "type": "work", "number": "+372 600 0002" }
+          ]
+        }
+      },
+      "lines": [
+        {
+          "lineNo": 1,
+          "product": { "sku": "SKU-RED-M", "name": "T-shirt red M" },
+          "quantity": 2,
+          "unitPrice": 19.9,
+          "discounts": [
+            { "code": "AUTUMN", "amount": 2.0 },
+            { "code": "VIP", "amount": 1.5 }
+          ]
+        },
+        {
+          "lineNo": 2,
+          "product": { "sku": "SKU-MUG", "name": "Mug" },
+          "quantity": 1,
+          "unitPrice": 8.5,
+          "discounts": []
+        }
+      ],
+      "shipments": [
+        {
+          "id": "SHP-1",
+          "carrier": "Omniva",
+          "parcels": [
+            { "trackingNo": "TRK-1", "weightKg": 0.4 },
+            { "trackingNo": "TRK-2", "weightKg": 0.6 }
+          ]
+        },
+        {
+          "id": "SHP-2",
+          "carrier": "DPD",
+          "parcels": [
+            { "trackingNo": "TRK-3", "weightKg": 1.25 }
+          ]
+        }
+      ],
+      "totals": { "net": 44.8, "vat": 10.75, "gross": 55.55, "currency": "EUR" }
+    }
+  }
+}

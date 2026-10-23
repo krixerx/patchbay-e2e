@@ -1,0 +1,9 @@
+{
+  "id": "document-base64-upload",
+  "name": "Document upload with base64 content",
+  "fields": [
+    { "id": "du-name", "name": "fileName", "type": "text", "required": true },
+    { "id": "du-type", "name": "contentType", "type": "text" },
+    { "id": "du-content", "name": "content", "type": "text", "required": true }
+  ]
+}

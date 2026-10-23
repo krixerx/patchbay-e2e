@@ -1,0 +1,13 @@
+{
+  "id": "typed-query",
+  "name": "Typed query parameters",
+  "fields": [
+    { "id": "tq-count", "name": "count", "type": "integer", "required": true },
+    { "id": "tq-ratio", "name": "ratio", "type": "number" },
+    { "id": "tq-active", "name": "active", "type": "boolean" },
+    { "id": "tq-day", "name": "day", "type": "date" },
+    { "id": "tq-at", "name": "at", "type": "datetime" },
+    { "id": "tq-label", "name": "label", "type": "text" },
+    { "id": "tq-ids", "name": "ids", "type": "list", "items": { "type": "integer" } }
+  ]
+}

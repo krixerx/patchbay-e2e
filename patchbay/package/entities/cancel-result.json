@@ -1,0 +1,11 @@
+{
+  "id": "cancel-result",
+  "name": "Cancellation result",
+  "fields": [
+    { "id": "cr-orderId", "name": "orderId", "type": "text" },
+    { "id": "cr-cancelled", "name": "cancelled", "type": "boolean" },
+    { "id": "cr-reason", "name": "reason", "type": "text" },
+    { "id": "cr-refund", "name": "refundAmount", "type": "number" },
+    { "id": "cr-currency", "name": "refundCurrency", "type": "text" }
+  ]
+}

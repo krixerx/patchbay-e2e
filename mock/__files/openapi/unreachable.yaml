@@ -1,0 +1,20 @@
+openapi: 3.0.3
+info:
+  title: Unreachable system (mock)
+  version: "1.0"
+  description: Its server address has nothing listening, so every call fails to connect.
+servers:
+  - url: http://mock:9999
+paths:
+  /edge/status:
+    get:
+      operationId: getStatus
+      responses:
+        "200":
+          description: Never answered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }

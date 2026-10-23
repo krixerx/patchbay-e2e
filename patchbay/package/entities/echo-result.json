@@ -1,0 +1,9 @@
+{
+  "id": "echo-result",
+  "name": "Echo result",
+  "fields": [
+    { "id": "er-message", "name": "message", "type": "text" },
+    { "id": "er-priority", "name": "priority", "type": "integer" },
+    { "id": "er-correlation", "name": "correlationId", "type": "text" }
+  ]
+}

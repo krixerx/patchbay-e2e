@@ -1,0 +1,37 @@
+{
+  "id": "shop-catalog-import",
+  "contract": "shop",
+  "operationId": "importCatalog",
+  "input": "catalog-import",
+  "output": "import-result",
+  "target": { "connection": "shop", "method": "POST", "path": "/shop/v1/catalog/import" },
+  "request": { "links": [
+    { "from": "ci-supplier", "to": "body.supplierCode" },
+    { "from": "ci-products", "to": "body.items[]" },
+    { "from": "ci-sku", "to": "body.items[].code" },
+    { "from": "ci-name", "to": "body.items[].title" },
+    { "from": "ci-price", "to": "body.items[].price" },
+    { "from": "ci-stock", "to": "body.items[].qty" },
+    { "from": "ci-active", "to": "body.items[].enabled" },
+    { "from": "ci-supplier", "to": "body.items[].supplier" },
+    { "from": "ci-variants", "to": "body.items[].options[]" },
+    { "from": "ci-v-sku", "to": "body.items[].options[].id" },
+    { "from": "ci-v-color", "to": "body.items[].options[].colour" },
+    { "from": "ci-v-size", "to": "body.items[].options[].size" }
+  ] },
+  "response": { "links": [
+    { "from": "importId", "to": "ir-importId" },
+    { "from": "received.supplierCode", "to": "ir-supplier" },
+    { "from": "received.items[]", "to": "ir-items" },
+    { "from": "received.items[].code", "to": "ir-sku" },
+    { "from": "received.items[].title", "to": "ir-title" },
+    { "from": "received.items[].price", "to": "ir-price" },
+    { "from": "received.items[].qty", "to": "ir-qty" },
+    { "from": "received.items[].enabled", "to": "ir-enabled" },
+    { "from": "received.items[].supplier", "to": "ir-item-supplier" },
+    { "from": "received.items[].options[]", "to": "ir-options" },
+    { "from": "received.items[].options[].id", "to": "ir-v-sku" },
+    { "from": "received.items[].options[].colour", "to": "ir-v-colour" },
+    { "from": "received.items[].options[].size", "to": "ir-v-size" }
+  ] }
+}

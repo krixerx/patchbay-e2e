@@ -1,0 +1,22 @@
+{
+  "id": "users-create",
+  "contract": "gorest",
+  "operationId": "createUser",
+  "input": "new-user",
+  "output": "user",
+  "target": { "connection": "gorest", "method": "POST", "path": "/public/v2/users" },
+  "auth": { "type": "bearer" },
+  "request": { "links": [
+    { "from": "nu-name", "to": "body.name" },
+    { "from": "nu-email", "to": "body.email" },
+    { "from": "nu-gender", "to": "body.gender" },
+    { "from": "nu-status", "to": "body.status" }
+  ] },
+  "response": { "links": [
+    { "from": "id", "to": "us-id" },
+    { "from": "name", "to": "us-name" },
+    { "from": "email", "to": "us-email" },
+    { "from": "gender", "to": "us-gender" },
+    { "from": "status", "to": "us-status" }
+  ] }
+}

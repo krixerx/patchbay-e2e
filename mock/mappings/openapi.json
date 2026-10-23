@@ -1,0 +1,14 @@
+{
+  "mappings": [
+    {
+      "name": "the swagger files Patchbay imports: /openapi/<api>.yaml",
+      "request": { "method": "GET", "urlPathPattern": "/openapi/[a-z-]+\\.yaml" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/yaml" },
+        "bodyFileName": "openapi/{{request.pathSegments.[1]}}",
+        "transformers": ["response-template"]
+      }
+    }
+  ]
+}

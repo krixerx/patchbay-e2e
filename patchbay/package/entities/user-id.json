@@ -1,0 +1,1 @@
+{ "id": "user-id", "name": "User id", "fields": [ { "id": "ui-id", "name": "userId", "type": "integer", "required": true } ] }

@@ -1,0 +1,12 @@
+{
+  "id": "books-delete",
+  "contract": "fake-rest-api",
+  "operationId": "deleteBook",
+  "input": "book-id",
+  "output": "empty",
+  "target": { "connection": "fake-rest-api", "method": "DELETE", "path": "/api/v1/Books/{id}" },
+  "request": { "links": [
+    { "from": "bk-bookId", "to": "path.id" }
+  ] },
+  "response": { "links": [] }
+}

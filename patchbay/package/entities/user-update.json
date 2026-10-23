@@ -1,0 +1,10 @@
+{
+  "id": "user-update",
+  "name": "User update",
+  "fields": [
+    { "id": "uu-id", "name": "userId", "type": "integer", "required": true },
+    { "id": "uu-name", "name": "name", "type": "text" },
+    { "id": "uu-email", "name": "email", "type": "text" },
+    { "id": "uu-status", "name": "status", "type": "text" }
+  ]
+}

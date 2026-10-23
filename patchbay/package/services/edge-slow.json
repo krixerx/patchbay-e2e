@@ -1,0 +1,10 @@
+{
+  "id": "edge-slow",
+  "contract": "edge",
+  "operationId": "getSlow",
+  "input": "empty",
+  "output": "ok",
+  "target": { "connection": "edge", "method": "GET", "path": "/edge/slow" },
+  "request": { "links": [] },
+  "response": { "links": [ { "from": "ok", "to": "ok-ok" } ] }
+}

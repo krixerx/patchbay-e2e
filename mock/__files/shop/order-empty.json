@@ -1,0 +1,16 @@
+{
+  "data": {
+    "order": {
+      "id": "ORD-EMPTY",
+      "createdAt": "2026-10-02T08:00:00Z",
+      "paid": false,
+      "customer": {
+        "id": 502,
+        "name": { "first": "Jaan", "last": null },
+        "contact": { "email": "jaan@example.com", "phones": [] }
+      },
+      "lines": [],
+      "totals": { "net": 0, "vat": 0, "gross": 0, "currency": "EUR" }
+    }
+  }
+}

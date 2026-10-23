@@ -1,0 +1,126 @@
+{
+  "mappings": [
+    {
+      "name": "shop: create order (echoes the body)",
+      "request": {
+        "method": "POST",
+        "urlPath": "/shop/v1/orders",
+        "headers": { "Content-Type": { "contains": "application/json" } }
+      },
+      "response": {
+        "status": 201,
+        "headers": { "Content-Type": "application/json" },
+        "body": "{\"orderId\":\"ORD-1001\",\"status\":\"CREATED\",\"received\":{{{request.body}}} }",
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "shop: get order (deeply nested, lists in lists)",
+      "request": { "method": "GET", "urlPath": "/shop/v1/orders/ORD-1001" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "bodyFileName": "shop/order-1001.json"
+      }
+    },
+    {
+      "name": "shop: get order without lines or shipments",
+      "request": { "method": "GET", "urlPath": "/shop/v1/orders/ORD-EMPTY" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "bodyFileName": "shop/order-empty.json"
+      }
+    },
+    {
+      "name": "shop: unknown order",
+      "priority": 9,
+      "request": { "method": "GET", "urlPathPattern": "/shop/v1/orders/[^/]+" },
+      "response": {
+        "status": 404,
+        "headers": { "Content-Type": "application/json" },
+        "jsonBody": { "error": "order-not-found" }
+      }
+    },
+    {
+      "name": "shop: change order status (echoes the body)",
+      "request": { "method": "PUT", "urlPathTemplate": "/shop/v1/orders/{orderId}/status" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "body": "{\"orderId\":\"{{request.path.orderId}}\",\"update\":{{{request.body}}} }",
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "shop: cancel order",
+      "request": { "method": "DELETE", "urlPathTemplate": "/shop/v1/orders/{orderId}" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "body": "{\"orderId\":\"{{request.path.orderId}}\",\"cancelled\":true,\"reason\":\"{{request.query.reason}}\",\"refund\":{\"amount\":49.95,\"currency\":\"EUR\"}}",
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "shop: catalog import (large body, echoed)",
+      "request": { "method": "POST", "urlPath": "/shop/v1/catalog/import" },
+      "response": {
+        "status": 202,
+        "headers": { "Content-Type": "application/json" },
+        "body": "{\"importId\":\"IMP-1\",\"received\":{{{request.body}}} }",
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "shop: catalog (10 000 products, about 2 MB)",
+      "request": { "method": "GET", "urlPath": "/shop/v1/catalog" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "bodyFileName": "shop/catalog-large.json"
+      }
+    },
+    {
+      "name": "shop: wide customer (120 fields in 6 nested groups, echoed)",
+      "request": { "method": "POST", "urlPath": "/shop/v1/customers" },
+      "response": {
+        "status": 201,
+        "headers": { "Content-Type": "application/json" },
+        "body": "{\"customerId\":\"C-1\",\"received\":{{{request.body}}} }",
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "shop: create order as XML",
+      "request": {
+        "method": "POST",
+        "urlPath": "/shop/v1/xml/orders",
+        "headers": { "Content-Type": { "contains": "xml" } }
+      },
+      "response": {
+        "status": 201,
+        "headers": { "Content-Type": "application/xml" },
+        "body": "<OrderConfirmation><orderId>ORD-2001</orderId><status>ACCEPTED</status><line><sku>XML-A</sku><qty>1</qty></line><line><sku>XML-B</sku><qty>3</qty></line></OrderConfirmation>"
+      }
+    },
+    {
+      "name": "shop: XML order with attributes and two lines",
+      "request": { "method": "GET", "urlPath": "/shop/v1/xml/orders/ORD-3001" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "text/xml; charset=UTF-8" },
+        "bodyFileName": "shop/order-3001.xml"
+      }
+    },
+    {
+      "name": "shop: XML order with a single line (one element must still map to a list)",
+      "request": { "method": "GET", "urlPath": "/shop/v1/xml/orders/ORD-3002" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "text/xml; charset=UTF-8" },
+        "bodyFileName": "shop/order-3002.xml"
+      }
+    }
+  ]
+}

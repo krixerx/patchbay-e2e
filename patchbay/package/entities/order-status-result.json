@@ -1,0 +1,10 @@
+{
+  "id": "order-status-result",
+  "name": "Order status result",
+  "fields": [
+    { "id": "sr-orderId", "name": "orderId", "type": "text" },
+    { "id": "sr-status", "name": "status", "type": "text" },
+    { "id": "sr-reason", "name": "reason", "type": "text" },
+    { "id": "sr-notify", "name": "notifyCustomer", "type": "boolean" }
+  ]
+}

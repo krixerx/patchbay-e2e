@@ -1,0 +1,16 @@
+{
+  "id": "docs-get-base64",
+  "contract": "docs",
+  "operationId": "getDocument",
+  "input": "document-id",
+  "output": "document-base64",
+  "target": { "connection": "docs", "method": "GET", "path": "/docs/v1/documents/{id}" },
+  "request": { "links": [ { "from": "dd-id", "to": "path.id" } ] },
+  "response": { "links": [
+    { "from": "documentId", "to": "db-id" },
+    { "from": "fileName", "to": "db-name" },
+    { "from": "contentType", "to": "db-type" },
+    { "from": "size", "to": "db-size" },
+    { "from": "contentBase64", "to": "db-content" }
+  ] }
+}

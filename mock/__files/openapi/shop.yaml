@@ -1,0 +1,401 @@
+openapi: 3.0.3
+info:
+  title: Shop (mock)
+  version: "1.0"
+  description: >
+    A made-up shop API with deeply nested objects, lists inside lists, large payloads and XML, served by WireMock
+    (mock/mappings/shop). Every call should carry the connection header X-Client-Id.
+servers:
+  - url: http://mock:8080
+paths:
+  /shop/v1/orders:
+    post:
+      operationId: createOrder
+      summary: Create an order; answers orderId and status with the received body under "received"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/NewOrder" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId: { type: string }
+                  status: { type: string }
+                  received: { $ref: "#/components/schemas/NewOrder" }
+  /shop/v1/orders/{orderId}:
+    parameters:
+      - { name: orderId, in: path, required: true, schema: { type: string } }
+    get:
+      operationId: getOrder
+      summary: One order (ORD-1001 full, ORD-EMPTY without lines); others answer 404
+      responses:
+        "200":
+          description: The order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      order: { $ref: "#/components/schemas/Order" }
+        "404": { description: Unknown order }
+    delete:
+      operationId: cancelOrder
+      summary: Cancel an order
+      parameters:
+        - { name: reason, in: query, schema: { type: string } }
+      responses:
+        "200":
+          description: Cancelled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId: { type: string }
+                  cancelled: { type: boolean }
+                  reason: { type: string }
+                  refund:
+                    type: object
+                    properties:
+                      amount: { type: number }
+                      currency: { type: string }
+  /shop/v1/orders/{orderId}/status:
+    put:
+      operationId: changeOrderStatus
+      summary: Change the status; echoes the body under "update"
+      parameters:
+        - { name: orderId, in: path, required: true, schema: { type: string } }
+        - { name: X-Correlation-Id, in: header, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/StatusChange" }
+      responses:
+        "200":
+          description: Changed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId: { type: string }
+                  update: { $ref: "#/components/schemas/StatusChange" }
+  /shop/v1/catalog:
+    get:
+      operationId: listCatalog
+      summary: The whole catalog, 10 000 products (about 2.5 MB)
+      parameters:
+        - { name: category, in: query, schema: { type: string } }
+      responses:
+        "200":
+          description: The catalog
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page: { type: integer }
+                  total: { type: integer }
+                  products:
+                    type: array
+                    items: { $ref: "#/components/schemas/Product" }
+  /shop/v1/catalog/import:
+    post:
+      operationId: importCatalog
+      summary: Import products; echoes the body under "received"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CatalogImport" }
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  importId: { type: string }
+                  received: { $ref: "#/components/schemas/CatalogImport" }
+  /shop/v1/customers:
+    post:
+      operationId: createCustomer
+      summary: >
+        Create a customer with 120 attributes in six groups (group01.attr001 … group06.attr120); echoes the body under
+        "received". The groups are free-form objects here; tools/GenerateFixtures.java defines their fields.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+                additionalProperties: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customerId: { type: string }
+                  received: { type: object, additionalProperties: true }
+  /shop/v1/xml/orders:
+    post:
+      operationId: createXmlOrder
+      summary: Create an order sent as XML; answers XML
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: object
+              xml: { name: Order }
+              properties:
+                ref: { type: string }
+                customer: { type: string }
+                line:
+                  type: array
+                  xml: { wrapped: false }
+                  items:
+                    type: object
+                    properties:
+                      sku: { type: string }
+                      qty: { type: integer }
+      responses:
+        "201":
+          description: Accepted
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml: { name: OrderConfirmation }
+                properties:
+                  orderId: { type: string }
+                  status: { type: string }
+                  line:
+                    type: array
+                    xml: { wrapped: false }
+                    items:
+                      type: object
+                      properties:
+                        sku: { type: string }
+                        qty: { type: integer }
+  /shop/v1/xml/orders/{orderId}:
+    get:
+      operationId: getXmlOrder
+      summary: An order as XML with attributes (ORD-3001 two lines, ORD-3002 one line)
+      parameters:
+        - { name: orderId, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: The order
+          content:
+            text/xml:
+              schema:
+                type: object
+                xml: { name: Order }
+                properties:
+                  id: { type: string, xml: { attribute: true } }
+                  currency: { type: string, xml: { attribute: true } }
+                  customer:
+                    type: object
+                    properties:
+                      name: { type: string }
+                      email: { type: string }
+                  paid: { type: boolean }
+                  line:
+                    type: array
+                    xml: { wrapped: false }
+                    items:
+                      type: object
+                      properties:
+                        no: { type: integer, xml: { attribute: true } }
+                        sku: { type: string }
+                        qty: { type: integer }
+                        price: { type: number }
+components:
+  schemas:
+    NewOrder:
+      type: object
+      properties:
+        externalRef: { type: string }
+        customer:
+          type: object
+          properties:
+            name:
+              type: object
+              properties:
+                first: { type: string }
+                last: { type: string }
+            contact:
+              type: object
+              properties:
+                email: { type: string }
+                phone: { type: string }
+            vip: { type: boolean }
+        currency: { type: string }
+        orderDate: { type: string, format: date }
+        comment: { type: string, nullable: true }
+        channel: { type: string }
+        labels:
+          type: array
+          items: { type: string }
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: object
+                properties:
+                  sku: { type: string }
+                  name: { type: string }
+              quantity: { type: integer }
+              unitPrice: { type: number }
+              shipCountry: { type: string }
+              currency: { type: string }
+              attributes:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    key: { type: string }
+                    val: { type: string }
+                    sku: { type: string }
+    Order:
+      type: object
+      properties:
+        id: { type: string }
+        createdAt: { type: string, format: date-time }
+        deliveryDate: { type: string, format: date }
+        paid: { type: boolean }
+        customer:
+          type: object
+          properties:
+            id: { type: integer }
+            name:
+              type: object
+              properties:
+                first: { type: string }
+                last: { type: string, nullable: true }
+            contact:
+              type: object
+              properties:
+                email: { type: string }
+                phones:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type: { type: string }
+                      number: { type: string }
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              lineNo: { type: integer }
+              product:
+                type: object
+                properties:
+                  sku: { type: string }
+                  name: { type: string }
+              quantity: { type: integer }
+              unitPrice: { type: number }
+              discounts:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    code: { type: string }
+                    amount: { type: number }
+        shipments:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              carrier: { type: string }
+              parcels:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    trackingNo: { type: string }
+                    weightKg: { type: number }
+        totals:
+          type: object
+          properties:
+            net: { type: number }
+            vat: { type: number }
+            gross: { type: number }
+            currency: { type: string }
+    StatusChange:
+      type: object
+      properties:
+        status: { type: string }
+        reason: { type: string }
+        notify: { type: boolean }
+    Product:
+      type: object
+      properties:
+        sku: { type: string }
+        name: { type: string }
+        category: { type: string }
+        pricing:
+          type: object
+          properties:
+            amount: { type: number }
+            currency: { type: string }
+        stock:
+          type: object
+          properties:
+            available: { type: integer }
+        variants:
+          type: array
+          items:
+            type: object
+            properties:
+              sku: { type: string }
+              attrs:
+                type: object
+                properties:
+                  color: { type: string }
+                  size: { type: string }
+    CatalogImport:
+      type: object
+      properties:
+        supplierCode: { type: string }
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              code: { type: string }
+              title: { type: string }
+              price: { type: number }
+              qty: { type: integer }
+              enabled: { type: boolean }
+              supplier: { type: string }
+              options:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: { type: string }
+                    colour: { type: string }
+                    size: { type: string }

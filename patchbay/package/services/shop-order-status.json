@@ -1,0 +1,22 @@
+{
+  "id": "shop-order-status",
+  "contract": "shop",
+  "operationId": "changeOrderStatus",
+  "input": "order-status-change",
+  "output": "order-status-result",
+  "target": { "connection": "shop", "method": "PUT", "path": "/shop/v1/orders/{orderId}/status" },
+  "addedHeaders": ["X-Correlation-Id"],
+  "request": { "links": [
+    { "from": "os-orderId", "to": "path.orderId" },
+    { "from": "os-status", "to": "body.status" },
+    { "from": "os-reason", "to": "body.reason" },
+    { "from": "os-notify", "to": "body.notify" },
+    { "from": "os-correlation", "to": "headers.X-Correlation-Id" }
+  ] },
+  "response": { "links": [
+    { "from": "orderId", "to": "sr-orderId" },
+    { "from": "update.status", "to": "sr-status" },
+    { "from": "update.reason", "to": "sr-reason" },
+    { "from": "update.notify", "to": "sr-notify" }
+  ] }
+}

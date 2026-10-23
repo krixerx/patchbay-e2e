@@ -1,0 +1,11 @@
+{
+  "id": "edge-secure-header",
+  "contract": "edge",
+  "operationId": "getSecureHeader",
+  "input": "empty",
+  "output": "ok",
+  "target": { "connection": "edge", "method": "GET", "path": "/edge/secure-header" },
+  "auth": { "type": "apiKey", "in": "header", "name": "X-Api-Key" },
+  "request": { "links": [] },
+  "response": { "links": [ { "from": "ok", "to": "ok-ok" } ] }
+}

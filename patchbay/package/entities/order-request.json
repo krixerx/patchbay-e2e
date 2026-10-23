@@ -1,0 +1,28 @@
+{
+  "id": "order-request",
+  "name": "Order request (flat customer, nested lines)",
+  "fields": [
+    { "id": "so-ref", "name": "orderRef", "type": "text", "required": true },
+    { "id": "so-first", "name": "customerFirstName", "type": "text" },
+    { "id": "so-last", "name": "customerLastName", "type": "text" },
+    { "id": "so-email", "name": "email", "type": "text", "required": true },
+    { "id": "so-phone", "name": "phone", "type": "text" },
+    { "id": "so-vip", "name": "vip", "type": "boolean" },
+    { "id": "so-country", "name": "country", "type": "text" },
+    { "id": "so-currency", "name": "currency", "type": "text" },
+    { "id": "so-date", "name": "orderDate", "type": "date" },
+    { "id": "so-notes", "name": "notes", "type": "text" },
+    { "id": "so-channel", "name": "channel", "type": "text", "value": "patchbay-test" },
+    { "id": "so-tags", "name": "tags", "type": "list", "items": { "type": "text" } },
+    { "id": "so-lines", "name": "lines", "type": "list", "items": { "type": "object", "fields": [
+      { "id": "so-sku", "name": "sku", "type": "text", "required": true },
+      { "id": "so-name", "name": "name", "type": "text" },
+      { "id": "so-qty", "name": "qty", "type": "integer" },
+      { "id": "so-price", "name": "price", "type": "number" },
+      { "id": "so-options", "name": "options", "type": "list", "items": { "type": "object", "fields": [
+        { "id": "so-opt-code", "name": "code", "type": "text" },
+        { "id": "so-opt-value", "name": "value", "type": "text" }
+      ] } }
+    ] } }
+  ]
+}

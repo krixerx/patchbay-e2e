@@ -1,0 +1,20 @@
+{
+  "id": "edge-headers",
+  "contract": "edge",
+  "operationId": "postEcho",
+  "input": "message",
+  "output": "echo-result",
+  "target": { "connection": "edge", "method": "POST", "path": "/edge/echo" },
+  "addedHeaders": ["X-Correlation-Id", "X-Tenant"],
+  "request": { "links": [
+    { "from": "msg-text", "to": "body.message" },
+    { "from": "msg-priority", "to": "body.priority" },
+    { "from": "msg-correlation", "to": "headers.X-Correlation-Id" },
+    { "from": "msg-tenant", "to": "headers.X-Tenant" }
+  ] },
+  "response": { "links": [
+    { "from": "received.message", "to": "er-message" },
+    { "from": "received.priority", "to": "er-priority" },
+    { "from": "correlationId", "to": "er-correlation" }
+  ] }
+}

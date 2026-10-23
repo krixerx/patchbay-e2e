@@ -1,0 +1,41 @@
+{
+  "id": "shop-order-get",
+  "contract": "shop",
+  "operationId": "getOrder",
+  "input": "order-id",
+  "output": "order-view",
+  "target": { "connection": "shop", "method": "GET", "path": "/shop/v1/orders/{orderId}" },
+  "request": { "links": [
+    { "from": "oi-orderId", "to": "path.orderId" }
+  ] },
+  "response": { "links": [
+    { "from": "data.order.id", "to": "ov-orderId" },
+    { "from": "data.order.createdAt", "to": "ov-createdAt" },
+    { "from": "data.order.deliveryDate", "to": "ov-delivery" },
+    { "from": "data.order.paid", "to": "ov-paid" },
+    { "from": "data.order.totals.gross", "to": "ov-total" },
+    { "from": "data.order.totals.currency", "to": "ov-currency" },
+    { "from": "data.order.customer.id", "to": "ov-cust-id" },
+    { "from": "data.order.customer.name.first", "to": "ov-first" },
+    { "from": "data.order.customer.name.last", "to": "ov-last" },
+    { "from": "data.order.customer.contact.email", "to": "ov-email" },
+    { "from": "data.order.customer.contact.phones[]", "to": "ov-phones" },
+    { "from": "data.order.customer.contact.phones[].type", "to": "ov-phone-type" },
+    { "from": "data.order.customer.contact.phones[].number", "to": "ov-phone-number" },
+    { "from": "data.order.lines[]", "to": "ov-lines" },
+    { "from": "data.order.lines[].lineNo", "to": "ov-line-no" },
+    { "from": "data.order.lines[].product.sku", "to": "ov-sku" },
+    { "from": "data.order.lines[].product.name", "to": "ov-product" },
+    { "from": "data.order.lines[].quantity", "to": "ov-qty" },
+    { "from": "data.order.lines[].unitPrice", "to": "ov-price" },
+    { "from": "data.order.lines[].discounts[]", "to": "ov-discounts" },
+    { "from": "data.order.lines[].discounts[].code", "to": "ov-disc-code" },
+    { "from": "data.order.lines[].discounts[].amount", "to": "ov-disc-amount" },
+    { "from": "data.order.shipments[]", "to": "ov-shipments" },
+    { "from": "data.order.shipments[].id", "to": "ov-ship-id" },
+    { "from": "data.order.shipments[].carrier", "to": "ov-carrier" },
+    { "from": "data.order.shipments[].parcels[]", "to": "ov-parcels" },
+    { "from": "data.order.shipments[].parcels[].trackingNo", "to": "ov-tracking" },
+    { "from": "data.order.shipments[].parcels[].weightKg", "to": "ov-weight" }
+  ] }
+}

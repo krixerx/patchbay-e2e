@@ -1,0 +1,13 @@
+{
+  "comment": "Settings that never travel in a package (connections, D-26/D-27). PatchbaySetup applies them through the admin API. Secrets come from MAPPER_SECRET_* in docker-compose.yml.",
+  "contracts": ["fake-rest-api", "gorest", "shop", "edge", "unreachable", "docs"],
+  "connections": {
+    "fake-rest-api": { "baseUrl": "http://mock:8080", "headers": [] },
+    "gorest": { "baseUrl": "http://mock:8080", "headers": [] },
+    "shop": { "baseUrl": "http://mock:8080", "headers": [ { "name": "X-Client-Id", "value": "patchbay-tests" } ] },
+    "edge": { "baseUrl": "http://mock:8080", "headers": [ { "name": "X-Client-Id", "value": "patchbay-tests" } ] },
+    "unreachable": { "baseUrl": "http://mock:9999", "headers": [] },
+    "docs": { "baseUrl": "http://mock:8080", "headers": [] }
+  },
+  "notPublished": ["broken-links", "lifecycle-book"]
+}

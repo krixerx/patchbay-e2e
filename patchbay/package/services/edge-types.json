@@ -1,0 +1,20 @@
+{
+  "id": "edge-types",
+  "contract": "edge",
+  "operationId": "getTypes",
+  "input": "typed-query",
+  "output": "url-echo",
+  "target": { "connection": "edge", "method": "GET", "path": "/edge/types" },
+  "request": { "links": [
+    { "from": "tq-count", "to": "query.count" },
+    { "from": "tq-ratio", "to": "query.ratio" },
+    { "from": "tq-active", "to": "query.active" },
+    { "from": "tq-day", "to": "query.day" },
+    { "from": "tq-at", "to": "query.at" },
+    { "from": "tq-label", "to": "query.label" },
+    { "from": "tq-ids", "to": "query.ids[]" }
+  ] },
+  "response": { "links": [
+    { "from": "query", "to": "ue-url" }
+  ] }
+}

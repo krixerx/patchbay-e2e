@@ -1,0 +1,10 @@
+{
+  "id": "user-search",
+  "name": "User search",
+  "fields": [
+    { "id": "uq-name", "name": "name", "type": "text" },
+    { "id": "uq-status", "name": "status", "type": "text" },
+    { "id": "uq-page", "name": "page", "type": "integer" },
+    { "id": "uq-perPage", "name": "perPage", "type": "integer" }
+  ]
+}

@@ -1,0 +1,106 @@
+openapi: 3.0.3
+info:
+  title: FakeRESTApi Books (mock)
+  version: "1.0"
+  description: Stand-in for https://fakerestapi.azurewebsites.net Books, served by WireMock (mock/mappings/books).
+servers:
+  - url: http://mock:8080
+paths:
+  /api/v1/Books:
+    get:
+      operationId: listBooks
+      summary: All books
+      responses:
+        "200":
+          description: A bare array of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Book" }
+    post:
+      operationId: createBook
+      summary: Create a book; answers it with a new id and the received body
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/NewBook" }
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SavedBook" }
+  /api/v1/Books/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: integer } }
+    get:
+      operationId: getBook
+      summary: One book; id 404 answers 404
+      responses:
+        "200":
+          description: The book
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Book" }
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema: { $ref: "#/components/schemas/Problem" }
+    put:
+      operationId: updateBook
+      summary: Update a book; echoes the body
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/NewBook" }
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SavedBook" }
+    delete:
+      operationId: deleteBook
+      summary: Delete a book; 200 with an empty body
+      responses:
+        "200":
+          description: Deleted, no body
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        description: { type: string, nullable: true }
+        pageCount: { type: integer }
+        excerpt: { type: string }
+        publishDate: { type: string, format: date-time }
+    NewBook:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        description: { type: string, nullable: true }
+        pageCount: { type: integer }
+        excerpt: { type: string }
+        publishDate: { type: string, format: date-time }
+        meta:
+          type: object
+          properties:
+            available: { type: boolean }
+    SavedBook:
+      type: object
+      properties:
+        id: { type: integer }
+        received: { $ref: "#/components/schemas/NewBook" }
+    Problem:
+      type: object
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }

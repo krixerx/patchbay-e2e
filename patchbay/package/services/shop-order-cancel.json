@@ -1,0 +1,19 @@
+{
+  "id": "shop-order-cancel",
+  "contract": "shop",
+  "operationId": "cancelOrder",
+  "input": "order-cancel",
+  "output": "cancel-result",
+  "target": { "connection": "shop", "method": "DELETE", "path": "/shop/v1/orders/{orderId}" },
+  "request": { "links": [
+    { "from": "ocx-orderId", "to": "path.orderId" },
+    { "from": "ocx-reason", "to": "query.reason" }
+  ] },
+  "response": { "links": [
+    { "from": "orderId", "to": "cr-orderId" },
+    { "from": "cancelled", "to": "cr-cancelled" },
+    { "from": "reason", "to": "cr-reason" },
+    { "from": "refund.amount", "to": "cr-refund" },
+    { "from": "refund.currency", "to": "cr-currency" }
+  ] }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "order-confirmation",
+  "name": "Order confirmation",
+  "fields": [
+    { "id": "oc-orderId", "name": "orderId", "type": "text" },
+    { "id": "oc-status", "name": "status", "type": "text" },
+    { "id": "oc-email", "name": "customerEmail", "type": "text" },
+    { "id": "oc-vip", "name": "vip", "type": "boolean" },
+    { "id": "oc-channel", "name": "channel", "type": "text" },
+    { "id": "oc-notes", "name": "notes", "type": "text" },
+    { "id": "oc-tags", "name": "labels", "type": "list", "items": { "type": "text" } },
+    { "id": "oc-lines", "name": "lines", "type": "list", "items": { "type": "object", "fields": [
+      { "id": "oc-sku", "name": "sku", "type": "text" },
+      { "id": "oc-qty", "name": "qty", "type": "integer" },
+      { "id": "oc-price", "name": "price", "type": "number" },
+      { "id": "oc-country", "name": "shipCountry", "type": "text" },
+      { "id": "oc-attrs", "name": "attributes", "type": "list", "items": { "type": "object", "fields": [
+        { "id": "oc-attr-code", "name": "code", "type": "text" },
+        { "id": "oc-attr-value", "name": "value", "type": "text" },
+        { "id": "oc-attr-sku", "name": "sku", "type": "text" }
+      ] } }
+    ] } }
+  ]
+}

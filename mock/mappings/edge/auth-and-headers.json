@@ -1,0 +1,40 @@
+{
+  "mappings": [
+    {
+      "name": "edge: API key in the query",
+      "request": { "method": "GET", "urlPath": "/edge/secure-query", "queryParameters": { "api_key": { "equalTo": "edge-query-key" } } },
+      "response": { "status": 200, "headers": { "Content-Type": "application/json" }, "jsonBody": { "ok": true } }
+    },
+    {
+      "name": "edge: API key in a header",
+      "request": { "method": "GET", "urlPath": "/edge/secure-header", "headers": { "X-Api-Key": { "equalTo": "edge-header-key" } } },
+      "response": { "status": 200, "headers": { "Content-Type": "application/json" }, "jsonBody": { "ok": true } }
+    },
+    {
+      "name": "edge: secured endpoint called without the key",
+      "priority": 9,
+      "request": { "method": "GET", "urlPathPattern": "/edge/secure-.*" },
+      "response": { "status": 401, "headers": { "Content-Type": "application/json" }, "jsonBody": { "error": "missing-or-wrong-key" } }
+    },
+    {
+      "name": "edge: echo of the body; sends a header that must not reach Patchbay's caller",
+      "request": { "method": "POST", "urlPath": "/edge/echo" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json", "X-Vendor-Secret": "must-not-reach-caller", "Set-Cookie": "vendor=1" },
+        "body": "{\"received\":{{{request.body}}},\"correlationId\":\"{{request.headers.X-Correlation-Id}}\"}",
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "edge: typed query parameters, echoed back as text",
+      "request": { "method": "GET", "urlPath": "/edge/types" },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "body": "{\"query\":\"{{request.url}}\"}",
+        "transformers": ["response-template"]
+      }
+    }
+  ]
+}

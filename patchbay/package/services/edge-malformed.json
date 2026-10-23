@@ -1,0 +1,10 @@
+{
+  "id": "edge-malformed",
+  "contract": "edge",
+  "operationId": "getMalformed",
+  "input": "empty",
+  "output": "ok",
+  "target": { "connection": "edge", "method": "GET", "path": "/edge/malformed" },
+  "request": { "links": [] },
+  "response": { "links": [ { "from": "ok", "to": "ok-ok" } ] }
+}

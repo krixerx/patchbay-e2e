@@ -1,0 +1,18 @@
+{
+  "id": "docs-upload-base64",
+  "contract": "docs",
+  "operationId": "uploadDocumentBase64",
+  "input": "document-base64-upload",
+  "output": "document-stored",
+  "target": { "connection": "docs", "method": "POST", "path": "/docs/v1/documents/base64" },
+  "request": { "links": [
+    { "from": "du-name", "to": "body.fileName" },
+    { "from": "du-type", "to": "body.contentType" },
+    { "from": "du-content", "to": "body.contentBase64" }
+  ] },
+  "response": { "links": [
+    { "from": "documentId", "to": "ds-id" },
+    { "from": "status", "to": "ds-status" },
+    { "from": "fileName", "to": "ds-name" }
+  ] }
+}

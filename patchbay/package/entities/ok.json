@@ -1,0 +1,1 @@
+{ "id": "ok", "name": "OK flag", "fields": [ { "id": "ok-ok", "name": "ok", "type": "boolean" } ] }

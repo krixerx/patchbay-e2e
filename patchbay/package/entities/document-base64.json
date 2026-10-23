@@ -1,0 +1,11 @@
+{
+  "id": "document-base64",
+  "name": "Document with base64 content",
+  "fields": [
+    { "id": "db-id", "name": "documentId", "type": "text" },
+    { "id": "db-name", "name": "fileName", "type": "text" },
+    { "id": "db-type", "name": "contentType", "type": "text" },
+    { "id": "db-size", "name": "size", "type": "integer" },
+    { "id": "db-content", "name": "content", "type": "text" }
+  ]
+}

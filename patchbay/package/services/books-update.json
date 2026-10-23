@@ -1,0 +1,21 @@
+{
+  "id": "books-update",
+  "contract": "fake-rest-api",
+  "operationId": "updateBook",
+  "input": "book-update",
+  "output": "book-saved",
+  "target": { "connection": "fake-rest-api", "method": "PUT", "path": "/api/v1/Books/{id}" },
+  "request": { "links": [
+    { "from": "bu-bookId", "to": "path.id" },
+    { "from": "bu-bookId", "to": "body.id" },
+    { "from": "bu-title", "to": "body.title" },
+    { "from": "bu-summary", "to": "body.description" },
+    { "from": "bu-pages", "to": "body.pageCount" }
+  ] },
+  "response": { "links": [
+    { "from": "id", "to": "bs-bookId" },
+    { "from": "received.title", "to": "bs-title" },
+    { "from": "received.description", "to": "bs-summary" },
+    { "from": "received.pageCount", "to": "bs-pages" }
+  ] }
+}

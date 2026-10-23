@@ -1,0 +1,17 @@
+{
+  "id": "xml-order-view",
+  "name": "Order read from XML",
+  "fields": [
+    { "id": "xv-id", "name": "orderId", "type": "text" },
+    { "id": "xv-currency", "name": "currency", "type": "text" },
+    { "id": "xv-name", "name": "customerName", "type": "text" },
+    { "id": "xv-email", "name": "customerEmail", "type": "text" },
+    { "id": "xv-paid", "name": "paid", "type": "boolean" },
+    { "id": "xv-lines", "name": "lines", "type": "list", "items": { "type": "object", "fields": [
+      { "id": "xv-no", "name": "lineNo", "type": "integer" },
+      { "id": "xv-sku", "name": "sku", "type": "text" },
+      { "id": "xv-qty", "name": "qty", "type": "integer" },
+      { "id": "xv-price", "name": "price", "type": "number" }
+    ] } }
+  ]
+}

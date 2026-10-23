@@ -1,0 +1,21 @@
+{
+  "id": "users-search",
+  "contract": "gorest",
+  "operationId": "searchUsers",
+  "input": "user-search",
+  "output": "user-list",
+  "target": { "connection": "gorest", "method": "GET", "path": "/public/v2/users" },
+  "request": { "links": [
+    { "from": "uq-name", "to": "query.name" },
+    { "from": "uq-status", "to": "query.status" },
+    { "from": "uq-page", "to": "query.page" },
+    { "from": "uq-perPage", "to": "query.per_page" }
+  ] },
+  "response": { "links": [
+    { "from": "[]", "to": "ul-users" },
+    { "from": "[].id", "to": "ul-id" },
+    { "from": "[].name", "to": "ul-name" },
+    { "from": "[].email", "to": "ul-email" },
+    { "from": "[].status", "to": "ul-status" }
+  ] }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "books-create",
+  "contract": "fake-rest-api",
+  "operationId": "createBook",
+  "input": "new-book",
+  "output": "book-saved",
+  "target": { "connection": "fake-rest-api", "method": "POST", "path": "/api/v1/Books" },
+  "request": { "links": [
+    { "from": "nb-title", "to": "body.title" },
+    { "from": "nb-summary", "to": "body.description" },
+    { "from": "nb-pages", "to": "body.pageCount" },
+    { "from": "nb-published", "to": "body.publishDate" },
+    { "from": "nb-available", "to": "body.meta.available" },
+    { "from": "nb-source", "to": "body.excerpt" }
+  ] },
+  "response": { "links": [
+    { "from": "id", "to": "bs-bookId" },
+    { "from": "received.title", "to": "bs-title" },
+    { "from": "received.description", "to": "bs-summary" },
+    { "from": "received.pageCount", "to": "bs-pages" },
+    { "from": "received.publishDate", "to": "bs-published" },
+    { "from": "received.meta.available", "to": "bs-available" },
+    { "from": "received.excerpt", "to": "bs-source" }
+  ] }
+}

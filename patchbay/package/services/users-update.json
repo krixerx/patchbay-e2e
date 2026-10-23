@@ -1,0 +1,21 @@
+{
+  "id": "users-update",
+  "contract": "gorest",
+  "operationId": "updateUser",
+  "input": "user-update",
+  "output": "user",
+  "target": { "connection": "gorest", "method": "PUT", "path": "/public/v2/users/{id}" },
+  "auth": { "type": "bearer" },
+  "request": { "links": [
+    { "from": "uu-id", "to": "path.id" },
+    { "from": "uu-name", "to": "body.name" },
+    { "from": "uu-email", "to": "body.email" },
+    { "from": "uu-status", "to": "body.status" }
+  ] },
+  "response": { "links": [
+    { "from": "id", "to": "us-id" },
+    { "from": "user.name", "to": "us-name" },
+    { "from": "user.email", "to": "us-email" },
+    { "from": "user.status", "to": "us-status" }
+  ] }
+}

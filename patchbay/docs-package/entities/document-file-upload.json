@@ -1,0 +1,8 @@
+{
+  "id": "document-file-upload",
+  "name": "Document file upload (multipart)",
+  "fields": [
+    { "id": "dfu-title", "name": "title", "type": "text" },
+    { "id": "dfu-file", "name": "file", "type": "binary", "required": true }
+  ]
+}

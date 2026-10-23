@@ -1,0 +1,41 @@
+{
+  "id": "order-view",
+  "name": "Order view (nested response reshaped)",
+  "fields": [
+    { "id": "ov-orderId", "name": "orderId", "type": "text" },
+    { "id": "ov-createdAt", "name": "createdAt", "type": "datetime" },
+    { "id": "ov-delivery", "name": "deliveryDate", "type": "date" },
+    { "id": "ov-paid", "name": "paid", "type": "boolean" },
+    { "id": "ov-total", "name": "total", "type": "number" },
+    { "id": "ov-currency", "name": "currency", "type": "text" },
+    { "id": "ov-customer", "name": "customer", "type": "object", "fields": [
+      { "id": "ov-cust-id", "name": "id", "type": "integer" },
+      { "id": "ov-first", "name": "firstName", "type": "text" },
+      { "id": "ov-last", "name": "lastName", "type": "text" },
+      { "id": "ov-email", "name": "email", "type": "text" },
+      { "id": "ov-phones", "name": "phones", "type": "list", "items": { "type": "object", "fields": [
+        { "id": "ov-phone-type", "name": "type", "type": "text" },
+        { "id": "ov-phone-number", "name": "number", "type": "text" }
+      ] } }
+    ] },
+    { "id": "ov-lines", "name": "lines", "type": "list", "items": { "type": "object", "fields": [
+      { "id": "ov-line-no", "name": "lineNo", "type": "integer" },
+      { "id": "ov-sku", "name": "sku", "type": "text" },
+      { "id": "ov-product", "name": "productName", "type": "text" },
+      { "id": "ov-qty", "name": "quantity", "type": "integer" },
+      { "id": "ov-price", "name": "unitPrice", "type": "number" },
+      { "id": "ov-discounts", "name": "discounts", "type": "list", "items": { "type": "object", "fields": [
+        { "id": "ov-disc-code", "name": "code", "type": "text" },
+        { "id": "ov-disc-amount", "name": "amount", "type": "number" }
+      ] } }
+    ] } },
+    { "id": "ov-shipments", "name": "shipments", "type": "list", "items": { "type": "object", "fields": [
+      { "id": "ov-ship-id", "name": "id", "type": "text" },
+      { "id": "ov-carrier", "name": "carrier", "type": "text" },
+      { "id": "ov-parcels", "name": "parcels", "type": "list", "items": { "type": "object", "fields": [
+        { "id": "ov-tracking", "name": "trackingNo", "type": "text" },
+        { "id": "ov-weight", "name": "weightKg", "type": "number" }
+      ] } }
+    ] } }
+  ]
+}

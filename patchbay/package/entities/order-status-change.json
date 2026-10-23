@@ -1,0 +1,11 @@
+{
+  "id": "order-status-change",
+  "name": "Order status change",
+  "fields": [
+    { "id": "os-orderId", "name": "orderId", "type": "text", "required": true },
+    { "id": "os-status", "name": "status", "type": "text", "required": true },
+    { "id": "os-reason", "name": "reason", "type": "text" },
+    { "id": "os-notify", "name": "notifyCustomer", "type": "boolean" },
+    { "id": "os-correlation", "name": "correlationId", "type": "text" }
+  ]
+}

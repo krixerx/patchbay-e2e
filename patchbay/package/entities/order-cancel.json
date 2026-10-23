@@ -1,0 +1,8 @@
+{
+  "id": "order-cancel",
+  "name": "Order cancellation",
+  "fields": [
+    { "id": "ocx-orderId", "name": "orderId", "type": "text", "required": true },
+    { "id": "ocx-reason", "name": "reason", "type": "text" }
+  ]
+}

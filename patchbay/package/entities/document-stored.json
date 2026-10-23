@@ -1,0 +1,10 @@
+{
+  "id": "document-stored",
+  "name": "Stored document",
+  "fields": [
+    { "id": "ds-id", "name": "documentId", "type": "text" },
+    { "id": "ds-status", "name": "status", "type": "text" },
+    { "id": "ds-title", "name": "title", "type": "text" },
+    { "id": "ds-name", "name": "fileName", "type": "text" }
+  ]
+}

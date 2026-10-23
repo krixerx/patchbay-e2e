@@ -1,0 +1,10 @@
+{
+  "id": "book-update",
+  "name": "Book update",
+  "fields": [
+    { "id": "bu-bookId", "name": "bookId", "type": "integer", "required": true },
+    { "id": "bu-title", "name": "title", "type": "text" },
+    { "id": "bu-summary", "name": "summary", "type": "text" },
+    { "id": "bu-pages", "name": "pages", "type": "integer" }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "document-content",
+  "name": "Raw document content",
+  "fields": [
+    { "id": "dc-id", "name": "documentId", "type": "text", "required": true },
+    { "id": "dc-content", "name": "content", "type": "binary", "required": true }
+  ]
+}

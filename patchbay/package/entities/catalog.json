@@ -1,0 +1,20 @@
+{
+  "id": "catalog",
+  "name": "Catalog (large response)",
+  "fields": [
+    { "id": "ca-total", "name": "total", "type": "integer" },
+    { "id": "ca-page", "name": "page", "type": "integer" },
+    { "id": "ca-products", "name": "products", "type": "list", "items": { "type": "object", "fields": [
+      { "id": "ca-sku", "name": "sku", "type": "text" },
+      { "id": "ca-name", "name": "name", "type": "text" },
+      { "id": "ca-price", "name": "price", "type": "number" },
+      { "id": "ca-currency", "name": "currency", "type": "text" },
+      { "id": "ca-available", "name": "available", "type": "integer" },
+      { "id": "ca-variants", "name": "variants", "type": "list", "items": { "type": "object", "fields": [
+        { "id": "ca-v-sku", "name": "sku", "type": "text" },
+        { "id": "ca-v-color", "name": "color", "type": "text" },
+        { "id": "ca-v-size", "name": "size", "type": "text" }
+      ] } }
+    ] } }
+  ]
+}

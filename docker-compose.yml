@@ -1,0 +1,47 @@
+# The system under test (Patchbay) and the external APIs it calls (WireMock).
+#   docker compose up -d --build --wait
+#   mvn test
+#   docker compose down
+# Patchbay is built from the sibling JustDoIntegration checkout; set PATCHBAY_ENGINE_DIR to build it from elsewhere.
+
+services:
+  mock:
+    image: wiremock/wiremock:3.13.2
+    command: ["--port", "8080", "--disable-banner", "--max-request-journal-entries", "2000"]
+    volumes:
+      - ./mock/mappings:/home/wiremock/mappings:ro
+      - ./mock/__files:/home/wiremock/__files:ro
+    ports:
+      - "18081:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:8080/__admin/health"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  patchbay:
+    image: patchbay:latest
+    build: ${PATCHBAY_ENGINE_DIR:-../JustDoIntegration/engine}
+    # /config is an empty tmpfs on every start. The tests configure Patchbay like a user would: import the swagger
+    # files from the mock, set the connections, import the generated package, publish (PatchbaySetup).
+    environment:
+      MAPPER_OUTBOUNDTIMEOUTMS: "2000"
+      MAPPER_SECRET_USERS_CREATE: gorest-test-token
+      MAPPER_SECRET_USERS_UPDATE: gorest-test-token
+      MAPPER_SECRET_EDGE_SECURE_QUERY: edge-query-key
+      MAPPER_SECRET_EDGE_SECURE_HEADER: edge-header-key
+    volumes:
+      - type: tmpfs
+        target: /config
+        tmpfs:
+          mode: 01777
+    ports:
+      - "18080:8080"
+    depends_on:
+      mock:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:8080/admin/integrations"]
+      interval: 2s
+      timeout: 2s
+      retries: 60
