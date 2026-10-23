@@ -44,4 +44,4 @@ Each step is recorded instead of thrown. `Patchbay.ensurePublished(slug)` fails 
 
 ## Known Patchbay findings (failing on purpose)
 
-None at the moment: all 178 tests pass against Patchbay `console/foundation` (up to the multipart commit). Fixed so far: outbound retries and cookies (OV-8), files as blobs (D-29).
+None at the moment: all 178 tests pass against Patchbay `console/foundation` (up to `4f5cc89`). Fixed so far: outbound retries and cookies (OV-8), files as blobs (D-29).
