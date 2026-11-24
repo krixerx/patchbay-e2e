@@ -46,6 +46,21 @@ class PublishLifecycleTest extends PatchbayTest {
         assertThat(Patchbay.activate("lifecycle-book", "9.9.9").status()).isBetween(400, 404);
     }
 
+    /**
+     * A text field linked to an object the contract declares: the version would compile and send "customer": "Mari"
+     * where the external API expects an object, so publishing refuses it with the shared shape rule.
+     */
+    @Test
+    void aSingleValueLinkedToAnObjectIsNotPublished() {
+        var r = Patchbay.publish("shape-mismatch");
+
+        assertThat(r.status()).isEqualTo(400);
+        assertThat(r.body())
+                .contains("so-first → body.customer")
+                .contains("A single value can't go into an object");
+        assertThat(Patchbay.integrations().path("active").has("shape-mismatch")).isFalse();
+    }
+
     @Test
     void aDraftWithBrokenLinksIsNotPublishedAndEveryProblemIsListed() {
         var r = Patchbay.publish("broken-links");

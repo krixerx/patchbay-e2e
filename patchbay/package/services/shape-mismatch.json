@@ -1,0 +1,13 @@
+{
+  "id": "shape-mismatch",
+  "contract": "shop",
+  "operationId": "createOrder",
+  "input": "order-request",
+  "output": "ok",
+  "target": { "connection": "shop", "method": "POST", "path": "/shop/v1/orders" },
+  "request": { "links": [
+    { "from": "so-ref", "to": "body.externalRef" },
+    { "from": "so-first", "to": "body.customer" }
+  ] },
+  "response": { "links": [] }
+}

@@ -11,5 +11,5 @@
     "docs": { "baseUrl": "http://mock:8080", "headers": [] },
     "registry": { "baseUrl": "http://mock:8080/soap/registry", "headers": [] }
   },
-  "notPublished": ["broken-links", "lifecycle-book"]
+  "notPublished": ["broken-links", "lifecycle-book", "shape-mismatch"]
 }
