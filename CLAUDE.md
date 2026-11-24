@@ -25,7 +25,7 @@ Patchbay listens on localhost:18080, WireMock on localhost:18081 (`-Dpatchbay.ur
 
 `PatchbaySetup` runs once per JVM (from `PatchbayTest`'s `@BeforeAll`) against an empty Patchbay:
 
-1. It imports each swagger file in `mock/__files/openapi/<api>.yaml` by URL (`POST /admin/api/contracts`). WireMock serves these at `/openapi/<api>.yaml`.
+1. It imports each swagger file in `mock/__files/openapi/<api>.yaml` by URL (`POST /admin/api/contracts`). WireMock serves these at `/openapi/<api>.yaml`. The WSDLs listed under `wsdlContracts` in `environment.json` are imported the same way from `/wsdl/<api>.wsdl`; Patchbay fetches the XSDs they import from the mock too.
 2. It sets connections from `patchbay/environment.json` (`PUT /admin/api/connections/{id}`). Connections and secrets never travel in packages. Secrets are `MAPPER_SECRET_<SLUG>` in `docker-compose.yml`.
 3. It zips `patchbay/package` and `patchbay/docs-package` into Patchbay packages (`manifest.json` + `entities/` + `services/`) and imports them (`POST /admin/api/import`). Copies land in `target/patchbay-*.zip`.
 4. It publishes every integration, except those under `notPublished` in `environment.json`.
@@ -39,9 +39,10 @@ Each step is recorded instead of thrown. `Patchbay.ensurePublished(slug)` fails 
 - `patchbay/docs-package` holds the document integrations of Patchbay's D-29 (in `../JustDoIntegration/docs/slice-plan.md`): a `blob` field type, held inside Patchbay as `{"contentType","fileName","size","data":"<base64>"}`, accepted and sent as raw body, multipart or base64 JSON on both sides (`formats.request` `binary`/`multipart`, `formats.output` `binary`, `$body` for a whole-body answer, `<blob>.data|fileName|contentType|size` in links, limit `mapper.max-blob-bytes` → 413). It stays a separate package so a document problem can't block the import of everything else. `DocumentsTest`'s class comment is the caller-side contract.
 - WireMock's `multipartPatterns` with `"matchingType": "ALL"` requires every part to match; use `ANY` to ask for one part.
 - `LargePayloadTest` and `DocumentsTest` repeat the formulas of `tools/GenerateFixtures.java`; change both together.
+- A SOAP integration (Patchbay D-30) is a draft with `formats.request` `soap` and a `target.soap` block that must equal what the WSDL import gives its operation (`SetupTest` compares them); the operation id is `<port>/<operation>` and the connection's base URL is the SOAP endpoint itself. `mock/__files/wsdl/registry.wsdl` has a SOAP 1.1 and a 1.2 port; its stubs in `mock/mappings/registry` match `SOAPAction` or the Content-Type's `action` and the body by namespaced XPath, answer with `{{xPath request.body ...}}` echoes, and fault for person code `00000000000` (1.1) or `bad` (1.2). `SoapTest`'s class comment is the caller-side contract.
 - `PatchbayTest` clears WireMock's journal before every test, so tests must not run in parallel.
 - From the Windows host, call the containers at `127.0.0.1`: Docker Desktop's IPv6 forwarding for `localhost` can stop answering (the JUnit client uses IPv4 and is not affected).
 
 ## Known Patchbay findings (failing on purpose)
 
-None at the moment: all 178 tests pass against Patchbay `console/foundation` (up to `4f5cc89`). Fixed so far: outbound retries and cookies (OV-8), files as blobs (D-29).
+None at the moment: all 196 tests pass against Patchbay `console/foundation` (up to `703b787`). Fixed so far: outbound retries and cookies (OV-8), files as blobs (D-29), SOAP from WSDL contracts (D-30).

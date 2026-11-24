@@ -1,0 +1,10 @@
+{
+  "id": "person-registration",
+  "name": "Person registration",
+  "fields": [
+    { "id": "pr-first", "name": "firstName", "type": "text", "required": true },
+    { "id": "pr-last", "name": "lastName", "type": "text", "required": true },
+    { "id": "pr-street", "name": "street", "type": "text", "required": true },
+    { "id": "pr-city", "name": "city", "type": "text", "required": true }
+  ]
+}

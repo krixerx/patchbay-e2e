@@ -1,0 +1,12 @@
+{
+  "id": "person-card",
+  "name": "Person card",
+  "fields": [
+    { "id": "pc-name", "name": "name", "type": "text" },
+    { "id": "pc-surname", "name": "surname", "type": "text" },
+    { "id": "pc-born", "name": "born", "type": "date" },
+    { "id": "pc-kids", "name": "kids", "type": "integer" },
+    { "id": "pc-city", "name": "city", "type": "text" },
+    { "id": "pc-phones", "name": "phones", "type": "list", "items": { "type": "text" } }
+  ]
+}

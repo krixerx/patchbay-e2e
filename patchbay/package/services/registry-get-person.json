@@ -1,0 +1,31 @@
+{
+  "id": "registry-get-person",
+  "contract": "registry",
+  "operationId": "RegistrySoap/GetPerson",
+  "input": "person-lookup",
+  "output": "person-card",
+  "target": {
+    "connection": "registry", "method": "POST", "path": "",
+    "soap": {
+      "version": "1.1",
+      "action": "urn:GetPerson",
+      "body": { "name": "GetPerson", "ns": "urn:example:registry" },
+      "address": "http://mock:8080/soap/registry",
+      "request": { "order": { "body": ["personCode", "includeHistory"] } },
+      "response": { "element": "GetPersonResponse", "lists": ["person.phones[]"] }
+    }
+  },
+  "formats": { "request": "soap" },
+  "request": { "links": [
+    { "from": "pl-history", "to": "body.includeHistory" },
+    { "from": "pl-code", "to": "body.personCode" }
+  ] },
+  "response": { "links": [
+    { "from": "person.firstName", "to": "pc-name" },
+    { "from": "person.lastName", "to": "pc-surname" },
+    { "from": "person.birthDate", "to": "pc-born" },
+    { "from": "person.children", "to": "pc-kids" },
+    { "from": "person.address.city", "to": "pc-city" },
+    { "from": "person.phones[]", "to": "pc-phones" }
+  ] }
+}

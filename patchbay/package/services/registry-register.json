@@ -1,0 +1,33 @@
+{
+  "id": "registry-register",
+  "contract": "registry",
+  "operationId": "RegistrySoap/RegisterPerson",
+  "input": "person-registration",
+  "output": "registration",
+  "target": {
+    "connection": "registry", "method": "POST", "path": "",
+    "soap": {
+      "version": "1.1",
+      "action": "urn:RegisterPerson",
+      "body": { "name": "RegisterPerson", "ns": "urn:example:registry" },
+      "address": "http://mock:8080/soap/registry",
+      "request": {
+        "ns": { "body.address.street": "urn:example:common", "body.address.city": "urn:example:common" },
+        "order": { "body": ["firstName", "lastName", "address"], "body.address": ["street", "city"] }
+      },
+      "response": { "element": "RegisterPersonResponse" }
+    }
+  },
+  "auth": { "type": "basic" },
+  "formats": { "request": "soap" },
+  "request": { "links": [
+    { "from": "pr-city", "to": "body.address.city" },
+    { "from": "pr-street", "to": "body.address.street" },
+    { "from": "pr-last", "to": "body.lastName" },
+    { "from": "pr-first", "to": "body.firstName" }
+  ] },
+  "response": { "links": [
+    { "from": "registrationId", "to": "rg-id" },
+    { "from": "status", "to": "rg-status" }
+  ] }
+}

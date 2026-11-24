@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Person registry, a SOAP service for SoapTest (Patchbay D-30). One portType with a SOAP 1.1 and a SOAP 1.2 port,
+  document/literal; the address type comes from types/common.xsd in a second namespace. Stubs: mock/mappings/registry.
+-->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:reg="urn:example:registry"
+                  xmlns:c="urn:example:common"
+                  targetNamespace="urn:example:registry">
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:example:registry" elementFormDefault="qualified">
+      <xs:import namespace="urn:example:common" schemaLocation="types/common.xsd"/>
+      <xs:element name="GetPerson">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="personCode" type="xs:string"/>
+            <xs:element name="includeHistory" type="xs:boolean" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetPersonResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="person" type="reg:Person"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="Person">
+        <xs:sequence>
+          <xs:element name="firstName" type="xs:string"/>
+          <xs:element name="lastName" type="xs:string"/>
+          <xs:element name="birthDate" type="xs:date"/>
+          <xs:element name="children" type="xs:int"/>
+          <xs:element name="address" type="c:Address"/>
+          <xs:element name="phones" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="RegisterPerson">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="firstName" type="xs:string"/>
+            <xs:element name="lastName" type="xs:string"/>
+            <xs:element name="address" type="c:Address"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RegisterPersonResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="registrationId" type="xs:long"/>
+            <xs:element name="status" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="GetPersonRequest"><wsdl:part name="parameters" element="reg:GetPerson"/></wsdl:message>
+  <wsdl:message name="GetPersonResponse"><wsdl:part name="parameters" element="reg:GetPersonResponse"/></wsdl:message>
+  <wsdl:message name="RegisterPersonRequest"><wsdl:part name="parameters" element="reg:RegisterPerson"/></wsdl:message>
+  <wsdl:message name="RegisterPersonResponse"><wsdl:part name="parameters" element="reg:RegisterPersonResponse"/></wsdl:message>
+  <wsdl:portType name="Registry">
+    <wsdl:operation name="GetPerson">
+      <wsdl:documentation>Finds a person by personal code</wsdl:documentation>
+      <wsdl:input message="reg:GetPersonRequest"/>
+      <wsdl:output message="reg:GetPersonResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="RegisterPerson">
+      <wsdl:input message="reg:RegisterPersonRequest"/>
+      <wsdl:output message="reg:RegisterPersonResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RegistrySoap" type="reg:Registry">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetPerson">
+      <soap:operation soapAction="urn:GetPerson"/>
+      <wsdl:input><soap:body use="literal"/></wsdl:input>
+      <wsdl:output><soap:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RegisterPerson">
+      <soap:operation soapAction="urn:RegisterPerson"/>
+      <wsdl:input><soap:body use="literal"/></wsdl:input>
+      <wsdl:output><soap:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="RegistrySoap12" type="reg:Registry">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetPerson">
+      <soap12:operation soapAction="urn:GetPerson"/>
+      <wsdl:input><soap12:body use="literal"/></wsdl:input>
+      <wsdl:output><soap12:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RegisterPerson">
+      <soap12:operation soapAction="urn:RegisterPerson"/>
+      <wsdl:input><soap12:body use="literal"/></wsdl:input>
+      <wsdl:output><soap12:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RegistryService">
+    <wsdl:port name="RegistrySoap" binding="reg:RegistrySoap">
+      <soap:address location="http://mock:8080/soap/registry"/>
+    </wsdl:port>
+    <wsdl:port name="RegistrySoap12" binding="reg:RegistrySoap12">
+      <soap12:address location="http://mock:8080/soap/registry"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,8 @@
+{
+  "id": "person-lookup",
+  "name": "Person lookup",
+  "fields": [
+    { "id": "pl-code", "name": "personCode", "type": "text", "required": true },
+    { "id": "pl-history", "name": "history", "type": "boolean" }
+  ]
+}

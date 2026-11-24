@@ -31,6 +31,7 @@ services:
       MAPPER_SECRET_USERS_UPDATE: gorest-test-token
       MAPPER_SECRET_EDGE_SECURE_QUERY: edge-query-key
       MAPPER_SECRET_EDGE_SECURE_HEADER: edge-header-key
+      MAPPER_SECRET_REGISTRY_REGISTER: "registry-user:s3cret"
     volumes:
       - type: tmpfs
         target: /config

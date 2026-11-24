@@ -20,7 +20,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 /**
  * Configures an empty Patchbay the way a user would, once per test run:
  * <ol>
- * <li>imports every swagger file from the mock container ({@code mock/__files/openapi}) by URL,</li>
+ * <li>imports every swagger file from the mock container ({@code mock/__files/openapi}) by URL, and every WSDL
+ * listed under {@code wsdlContracts} ({@code mock/__files/wsdl}, D-30), whose XSD imports Patchbay fetches too,</li>
  * <li>sets each connection's base URL and headers ({@code patchbay/environment.json}),</li>
  * <li>imports the packages generated from {@code patchbay/package} and {@code patchbay/docs-package} (D-28),</li>
  * <li>publishes every integration in them.</li>
@@ -59,6 +60,12 @@ public final class PatchbaySetup {
             String id = c.asText();
             String body = Json.write(Map.of("name", id, "url", MOCK_FROM_PATCHBAY + "/openapi/" + id + ".yaml"));
             STEPS.put("contract " + id, new Step("import swagger " + id,
+                    Http.send("POST", Patchbay.URL + "/admin/api/contracts", "application/json", body, Map.of())));
+        }
+        for (JsonNode c : env.path("wsdlContracts")) {
+            String id = c.asText();
+            String body = Json.write(Map.of("name", id, "url", MOCK_FROM_PATCHBAY + "/wsdl/" + id + ".wsdl"));
+            STEPS.put("contract " + id, new Step("import WSDL " + id,
                     Http.send("POST", Patchbay.URL + "/admin/api/contracts", "application/json", body, Map.of())));
         }
         env.path("connections").properties().forEach(e -> STEPS.put("connection " + e.getKey(), new Step("set connection " + e.getKey(),

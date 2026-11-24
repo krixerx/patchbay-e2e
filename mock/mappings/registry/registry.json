@@ -1,0 +1,119 @@
+{
+  "mappings": [
+    {
+      "name": "registry: the WSDL Patchbay imports",
+      "request": { "method": "GET", "urlPath": "/wsdl/registry.wsdl" },
+      "response": { "status": 200, "headers": { "Content-Type": "text/xml" }, "bodyFileName": "wsdl/registry.wsdl" }
+    },
+    {
+      "name": "registry: the XSD the WSDL imports by a relative location",
+      "request": { "method": "GET", "urlPath": "/wsdl/types/common.xsd" },
+      "response": { "status": 200, "headers": { "Content-Type": "text/xml" }, "bodyFileName": "wsdl/types/common.xsd" }
+    },
+    {
+      "name": "registry: GetPerson over SOAP 1.1 (prefixes declared on the Envelope, one phone number)",
+      "request": {
+        "method": "POST",
+        "urlPath": "/soap/registry",
+        "headers": {
+          "SOAPAction": { "equalTo": "\"urn:GetPerson\"" },
+          "Content-Type": { "contains": "text/xml" }
+        },
+        "bodyPatterns": [ {
+          "matchesXPath": "/soap:Envelope/soap:Body/reg:GetPerson/reg:personCode",
+          "xPathNamespaces": { "soap": "http://schemas.xmlsoap.org/soap/envelope/", "reg": "urn:example:registry" }
+        } ]
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "text/xml; charset=utf-8" },
+        "body": "<S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns2=\"urn:example:registry\" xmlns:ns3=\"urn:example:common\"><S:Body><ns2:GetPersonResponse><ns2:person><ns2:firstName>Mari</ns2:firstName><ns2:lastName>Tamm-{{xPath request.body '//*[local-name()=\"personCode\"]/text()'}}</ns2:lastName><ns2:birthDate>1980-01-01</ns2:birthDate><ns2:children>2</ns2:children><ns2:address><ns3:street>Pikk 1</ns3:street><ns3:city>Tallinn</ns3:city></ns2:address><ns2:phones>+372 5550001</ns2:phones></ns2:person></ns2:GetPersonResponse></S:Body></S:Envelope>",
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "registry: GetPerson over SOAP 1.1 for an unknown person: a fault on HTTP 500",
+      "priority": 1,
+      "request": {
+        "method": "POST",
+        "urlPath": "/soap/registry",
+        "headers": { "SOAPAction": { "equalTo": "\"urn:GetPerson\"" } },
+        "bodyPatterns": [ {
+          "matchesXPath": "/soap:Envelope/soap:Body/reg:GetPerson/reg:personCode[text()='00000000000']",
+          "xPathNamespaces": { "soap": "http://schemas.xmlsoap.org/soap/envelope/", "reg": "urn:example:registry" }
+        } ]
+      },
+      "response": {
+        "status": 500,
+        "headers": { "Content-Type": "text/xml; charset=utf-8" },
+        "body": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><soap:Fault><faultcode>soap:Client</faultcode><faultstring>Unknown person</faultstring><detail><e:error xmlns:e=\"urn:example:errors\"><e:code>PERSON_NOT_FOUND</e:code><e:field>personCode</e:field></e:error></detail></soap:Fault></soap:Body></soap:Envelope>"
+      }
+    },
+    {
+      "name": "registry: GetPerson over SOAP 1.2 (action in the Content-Type, two phone numbers)",
+      "request": {
+        "method": "POST",
+        "urlPath": "/soap/registry",
+        "headers": { "Content-Type": { "matches": "application/soap\\+xml.*action=\"urn:GetPerson\".*" } },
+        "bodyPatterns": [ {
+          "matchesXPath": "/env:Envelope/env:Body/reg:GetPerson/reg:personCode",
+          "xPathNamespaces": { "env": "http://www.w3.org/2003/05/soap-envelope", "reg": "urn:example:registry" }
+        } ]
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/soap+xml; charset=utf-8" },
+        "body": "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\"><env:Body><r:GetPersonResponse xmlns:r=\"urn:example:registry\" xmlns:a=\"urn:example:common\"><r:person><r:firstName>Jaan</r:firstName><r:lastName>Kask-{{xPath request.body '//*[local-name()=\"personCode\"]/text()'}}</r:lastName><r:birthDate>1975-06-30</r:birthDate><r:children>0</r:children><r:address><a:street>Ülikooli 18</a:street><a:city>Tartu</a:city></r:address><r:phones>+372 5550002</r:phones><r:phones>+372 5550003</r:phones></r:person></r:GetPersonResponse></env:Body></env:Envelope>",
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "registry: GetPerson over SOAP 1.2 with a code that is not valid: a Sender fault on HTTP 400",
+      "priority": 1,
+      "request": {
+        "method": "POST",
+        "urlPath": "/soap/registry",
+        "headers": { "Content-Type": { "contains": "application/soap+xml" } },
+        "bodyPatterns": [ {
+          "matchesXPath": "/env:Envelope/env:Body/reg:GetPerson/reg:personCode[text()='bad']",
+          "xPathNamespaces": { "env": "http://www.w3.org/2003/05/soap-envelope", "reg": "urn:example:registry" }
+        } ]
+      },
+      "response": {
+        "status": 400,
+        "headers": { "Content-Type": "application/soap+xml; charset=utf-8" },
+        "body": "<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\"><env:Body><env:Fault><env:Code><env:Value>env:Sender</env:Value><env:Subcode><env:Value>r:InvalidCode</env:Value></env:Subcode></env:Code><env:Reason><env:Text xml:lang=\"en\">Personal code is not valid</env:Text></env:Reason></env:Fault></env:Body></env:Envelope>"
+      }
+    },
+    {
+      "name": "registry: RegisterPerson over SOAP 1.1 with Basic auth (address in the common namespace)",
+      "request": {
+        "method": "POST",
+        "urlPath": "/soap/registry",
+        "headers": {
+          "SOAPAction": { "equalTo": "\"urn:RegisterPerson\"" },
+          "Authorization": { "equalTo": "Basic cmVnaXN0cnktdXNlcjpzM2NyZXQ=" }
+        },
+        "bodyPatterns": [ {
+          "matchesXPath": "/soap:Envelope/soap:Body/reg:RegisterPerson/reg:address/c:street",
+          "xPathNamespaces": { "soap": "http://schemas.xmlsoap.org/soap/envelope/", "reg": "urn:example:registry", "c": "urn:example:common" }
+        } ]
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "text/xml; charset=utf-8" },
+        "body": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><RegisterPersonResponse xmlns=\"urn:example:registry\"><registrationId>4711</registrationId><status>REGISTERED</status></RegisterPersonResponse></soap:Body></soap:Envelope>"
+      }
+    },
+    {
+      "name": "registry: anything else, e.g. RegisterPerson without Basic auth",
+      "priority": 9,
+      "request": { "method": "POST", "urlPath": "/soap/registry" },
+      "response": {
+        "status": 401,
+        "headers": { "Content-Type": "text/plain" },
+        "body": "not authorized or not understood"
+      }
+    }
+  ]
+}
