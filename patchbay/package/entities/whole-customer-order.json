@@ -1,0 +1,17 @@
+{
+  "id": "whole-customer-order",
+  "name": "Order with the customer as one object",
+  "fields": [
+    { "id": "wo-ref", "name": "orderRef", "type": "text", "required": true },
+    { "id": "wo-customer", "name": "customer", "type": "object", "fields": [
+      { "id": "wo-name", "name": "name", "type": "object", "fields": [
+        { "id": "wo-first", "name": "first", "type": "text" },
+        { "id": "wo-last", "name": "last", "type": "text" }
+      ] },
+      { "id": "wo-contact", "name": "contact", "type": "object", "fields": [
+        { "id": "wo-email", "name": "email", "type": "text" }
+      ] },
+      { "id": "wo-vip", "name": "vip", "type": "boolean" }
+    ] }
+  ]
+}

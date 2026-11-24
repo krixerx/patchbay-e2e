@@ -152,4 +152,18 @@ class NestedMappingTest extends PatchbayTest {
                 {"orderId":"ORD-1001","cancelled":true,"reason":"changed mind","refundAmount":49.95,"refundCurrency":"EUR"}""");
         assertThat(Mock.single("DELETE", "/shop/v1/orders/ORD-1001").url()).matches(".*\\?reason=changed(%20|\\+)mind");
     }
+
+    /** An object linked as a whole goes out as it came in and comes back the same way (was an NPE at publish). */
+    @Test
+    void anObjectLinkedAsAWholeIsCopiedInBothDirections() {
+        Patchbay.ensurePublished("shop-order-whole");
+        String customer = """
+                {"name":{"first":"Mari","last":"Tamm"},"contact":{"email":"mari@example.com"},"vip":true}""";
+
+        var r = Patchbay.send("POST", "shop-order-whole", "{\"orderRef\":\"R-9\",\"customer\":" + customer + "}");
+
+        assertThat(r.status()).as("%s", r).isEqualTo(200);
+        assertJsonEquals(Mock.single("POST", "/shop/v1/orders").json(), "{\"externalRef\":\"R-9\",\"customer\":" + customer + "}");
+        assertJsonEquals(r.json(), "{\"orderId\":\"ORD-1001\",\"customer\":" + customer + "}");
+    }
 }

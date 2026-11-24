@@ -1,0 +1,17 @@
+{
+  "id": "whole-customer-confirmation",
+  "name": "Order confirmation with the customer as one object",
+  "fields": [
+    { "id": "wc-orderId", "name": "orderId", "type": "text" },
+    { "id": "wc-customer", "name": "customer", "type": "object", "fields": [
+      { "id": "wc-name", "name": "name", "type": "object", "fields": [
+        { "id": "wc-first", "name": "first", "type": "text" },
+        { "id": "wc-last", "name": "last", "type": "text" }
+      ] },
+      { "id": "wc-contact", "name": "contact", "type": "object", "fields": [
+        { "id": "wc-email", "name": "email", "type": "text" }
+      ] },
+      { "id": "wc-vip", "name": "vip", "type": "boolean" }
+    ] }
+  ]
+}

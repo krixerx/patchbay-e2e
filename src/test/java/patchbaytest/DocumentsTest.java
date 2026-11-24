@@ -208,6 +208,19 @@ class DocumentsTest extends PatchbayTest {
         assertThat(Mock.total()).isZero();
     }
 
+    /** A file's type and name become outbound header values, so a line break in them is refused, not sent. */
+    @Test
+    void aLineBreakInAJsonBlobsTypeIs400() {
+        Patchbay.ensurePublished("docs-upload-multipart");
+
+        var r = Patchbay.send("POST", "docs-upload-multipart", Json.write(Map.of("file", Map.of("fileName", "x.pdf",
+                "contentType", "application/pdf\r\nContent-Disposition: form-data; name=\"role\"\r\n\r\nadmin", "data", "QUJD"))));
+
+        assertThat(r.status()).as("%s", r).isEqualTo(400);
+        assertThat(r.json().path("problems").toString()).contains("file.contentType: must not contain line breaks");
+        assertThat(Mock.total()).isZero();
+    }
+
     @Test
     void aMissingRequiredBlobIs400() {
         Patchbay.ensurePublished("docs-upload-multipart");

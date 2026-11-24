@@ -1,0 +1,16 @@
+{
+  "id": "shop-order-whole",
+  "contract": "shop",
+  "operationId": "createOrder",
+  "input": "whole-customer-order",
+  "output": "whole-customer-confirmation",
+  "target": { "connection": "shop", "method": "POST", "path": "/shop/v1/orders" },
+  "request": { "links": [
+    { "from": "wo-ref", "to": "body.externalRef" },
+    { "from": "wo-customer", "to": "body.customer" }
+  ] },
+  "response": { "links": [
+    { "from": "orderId", "to": "wc-orderId" },
+    { "from": "received.customer", "to": "wc-customer" }
+  ] }
+}

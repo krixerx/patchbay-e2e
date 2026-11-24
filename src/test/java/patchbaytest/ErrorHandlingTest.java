@@ -50,6 +50,19 @@ class ErrorHandlingTest extends PatchbayTest {
         assertThat(Mock.received("GET", "/edge/status")).as("no retry").hasSize(1);
     }
 
+    /** A connection's base URL goes into the route's endpoint, so user info, a fragment or a placeholder is refused. */
+    @ParameterizedTest
+    @ValueSource(strings = {"http://user:pw@mock:9999", "http://mock:9999/#top", "http://mock:9999/{{secret}}"})
+    void aConnectionBaseUrlThatIsNotAPlainUrlIsRefusedAndNothingChanges(String url) {
+        String before = Patchbay.admin("GET", "/admin/api/connections/unreachable").body();
+
+        var r = Http.send("PUT", Patchbay.URL + "/admin/api/connections/unreachable", "application/json",
+                "{\"baseUrl\":\"" + url + "\"}", Map.of());
+
+        assertThat(r.status()).as("%s", r).isEqualTo(400);
+        assertThat(Patchbay.admin("GET", "/admin/api/connections/unreachable").body()).isEqualTo(before);
+    }
+
     /** The outbound HTTP client must not wait for Retry-After and call again (fixed in OutboundHttpConfig). */
     @Test
     void aRateLimitAnswerWithRetryAfterIsPassedThroughNotRetried() {
@@ -77,6 +90,34 @@ class ErrorHandlingTest extends PatchbayTest {
         assertThat(r.status()).isEqualTo(504);
         assertThat(r.json().path("error").asText()).isEqualTo("remote-timeout");
         assertThat(Duration.ofNanos(System.nanoTime() - start)).isLessThan(Duration.ofSeconds(4));
+    }
+
+    /** NFR-001: calls that wait for a slow vendor run side by side; they used to run 8 at a time. */
+    @Test
+    void parallelSlowCallsAreNotServedInBatches() throws Exception {
+        var client = java.net.http.HttpClient.newHttpClient();
+        int calls = 24;
+        long start = System.nanoTime();
+        var sent = new java.util.ArrayList<java.util.concurrent.CompletableFuture<java.net.http.HttpResponse<String>>>();
+        for (int i = 0; i < calls; i++) {
+            sent.add(client.sendAsync(java.net.http.HttpRequest.newBuilder(java.net.URI.create(Patchbay.endpoint("edge-sluggish"))).build(),
+                    java.net.http.HttpResponse.BodyHandlers.ofString()));
+        }
+        for (var f : sent) {
+            assertThat(f.get().statusCode()).isEqualTo(200);
+        }
+        // Each vendor call takes 0.5 s; three batches of 8 would take 1.5 s.
+        assertThat(Duration.ofNanos(System.nanoTime() - start)).isLessThan(Duration.ofMillis(1300));
+        assertThat(Mock.received("GET", "/edge/sluggish")).hasSize(calls);
+    }
+
+    /** Every answer carries the caller's request id, so a failed call can be found in Patchbay's log. */
+    @Test
+    void theRequestIdComesBackWithAnError() {
+        var r = Patchbay.call("GET", "edge-status", Map.of("code", 500), Map.of("X-Request-Id", "e2e-4711"));
+
+        assertThat(r.status()).isEqualTo(500);
+        assertThat(r.header("X-Request-Id")).isEqualTo("e2e-4711");
     }
 
     @Test
@@ -136,6 +177,43 @@ class ErrorHandlingTest extends PatchbayTest {
 
         assertThat(r.status()).isEqualTo(415);
         assertThat(Mock.total()).isZero();
+    }
+
+    /** The gate decides on the path the router sees, so a ;parameter can't skip its checks (it used to). */
+    @Test
+    void aPathParameterDoesNotSkipTheGate() {
+        var r = Http.send("POST", Patchbay.URL + "/api/v1/integrations;x/books-create", "text/plain", "{\"title\":\"T\",\"pages\":1}", Map.of());
+
+        assertThat(r.status()).as("%s", r).isEqualTo(415);
+        assertThat(Mock.total()).isZero();
+    }
+
+    /** mapper.max-body-bytes (10 MiB by default) also limits a chunked JSON body, which declares no length. */
+    @Test
+    void aChunkedJsonBodyOverTheLimitIs413() throws Exception {
+        byte[] big = ("{\"title\":\"" + "x".repeat(11 * 1024 * 1024) + "\",\"pages\":1}").getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        var r = java.net.http.HttpClient.newHttpClient().send(java.net.http.HttpRequest.newBuilder(java.net.URI.create(Patchbay.endpoint("books-create")))
+                        .header("Content-Type", "application/json")
+                        .POST(java.net.http.HttpRequest.BodyPublishers.ofInputStream(() -> new java.io.ByteArrayInputStream(big))).build(),
+                java.net.http.HttpResponse.BodyHandlers.ofString());
+
+        assertThat(r.statusCode()).as(r.body()).isEqualTo(413);
+        assertThat(r.body()).contains("payload-too-large");
+        assertThat(Mock.total()).isZero();
+    }
+
+    /** A contract may not refer to files outside itself: the engine would read its own files or call other hosts. */
+    @Test
+    void aContractWithAnExternalReferenceIsRefused() {
+        String text = """
+                {"openapi":"3.0.1","info":{"title":"t","version":"1"},"paths":{"/a":{"get":{"responses":{"200":{"description":"ok",
+                  "content":{"application/json":{"schema":{"$ref":"../config/connections/shop.json#/x"}}}}}}}}}""";
+        var r = Http.send("POST", Patchbay.URL + "/admin/api/contracts", "application/json",
+                patchbaytest.support.Json.write(Map.of("name", "ref-probe", "content", text)), Map.of());
+
+        assertThat(r.status()).as("%s", r).isEqualTo(400);
+        assertThat(r.body()).contains("../config/connections/shop.json#/x");
+        assertThat(Patchbay.admin("GET", "/admin/api/contracts/ref-probe").status()).isNotEqualTo(200);
     }
 
     @Test
