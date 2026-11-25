@@ -202,6 +202,26 @@ class ErrorHandlingTest extends PatchbayTest {
         assertThat(Mock.total()).isZero();
     }
 
+    /** The console API is behind the admin login (harden-admin-surface); the callers' side is not. */
+    @Test
+    void theAdminApiNeedsTheAdminLogin() {
+        String wrong = "Basic " + java.util.Base64.getEncoder().encodeToString("e2e-admin:wrong".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        var r = Http.send("GET", Patchbay.URL + "/admin/api/integrations", null, null, Map.of("Authorization", wrong));
+
+        assertThat(r.status()).isEqualTo(401);
+        assertThat(r.header("WWW-Authenticate")).startsWith("Basic realm=\"Patchbay\"");
+        assertThat(Patchbay.admin("GET", "/admin/api/integrations").status()).isEqualTo(200);
+    }
+
+    /** A web page could send text/plain without a CORS preflight, so admin changes only take JSON (or a ZIP for packages). */
+    @Test
+    void anAdminChangeSentAsPlainTextIs415() {
+        var r = Http.send("POST", Patchbay.URL + "/admin/api/integrations", "text/plain", "{\"name\":\"plain probe\"}", Map.of());
+
+        assertThat(r.status()).as("%s", r).isEqualTo(415);
+        assertThat(Patchbay.admin("GET", "/admin/api/integrations/plain-probe").status()).isNotEqualTo(200);
+    }
+
     /** A contract may not refer to files outside itself: the engine would read its own files or call other hosts. */
     @Test
     void aContractWithAnExternalReferenceIsRefused() {

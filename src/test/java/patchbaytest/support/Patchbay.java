@@ -11,6 +11,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 public final class Patchbay {
 
     public static final String URL = System.getProperty("patchbay.url", "http://localhost:18080");
+    /** The admin login docker-compose.yml starts Patchbay with; every call to its admin API sends it. */
+    public static final String ADMIN_USER = System.getProperty("patchbay.admin-user", "e2e-admin");
+    public static final String ADMIN_PASSWORD = System.getProperty("patchbay.admin-password", "e2e-admin-password");
+    public static final String ADMIN_AUTHORIZATION = "Basic " + java.util.Base64.getEncoder()
+            .encodeToString((ADMIN_USER + ":" + ADMIN_PASSWORD).getBytes(java.nio.charset.StandardCharsets.UTF_8));
 
     private Patchbay() {
     }

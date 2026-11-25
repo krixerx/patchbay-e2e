@@ -64,6 +64,10 @@ public final class Http {
         if (contentType != null) {
             b.header("Content-Type", contentType);
         }
+        // Patchbay's console API needs its admin login; a test that sends its own Authorization keeps it.
+        if (url.startsWith(Patchbay.URL + "/admin") && headers.keySet().stream().noneMatch("Authorization"::equalsIgnoreCase)) {
+            b.header("Authorization", Patchbay.ADMIN_AUTHORIZATION);
+        }
         headers.forEach(b::header);
         try {
             HttpResponse<byte[]> r = CLIENT.send(b.build(), HttpResponse.BodyHandlers.ofByteArray());

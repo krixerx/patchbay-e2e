@@ -26,6 +26,9 @@ services:
     # files from the mock, set the connections, import the generated package, publish (PatchbaySetup).
     environment:
       MAPPER_OUTBOUNDTIMEOUTMS: "2000"
+      # The admin login the tests send (Patchbay.ADMIN_USER / ADMIN_PASSWORD); without it the admin API is closed.
+      MAPPER_ADMIN_USER: e2e-admin
+      MAPPER_ADMIN_PASSWORD: e2e-admin-password
       MAPPER_MAXBLOBBYTES: "2097152"
       MAPPER_SECRET_USERS_CREATE: gorest-test-token
       MAPPER_SECRET_USERS_UPDATE: gorest-test-token

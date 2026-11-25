@@ -23,7 +23,7 @@ Patchbay listens on localhost:18080, WireMock on localhost:18081 (`-Dpatchbay.ur
 
 ## How a test run configures Patchbay
 
-`PatchbaySetup` runs once per JVM (from `PatchbayTest`'s `@BeforeAll`) against an empty Patchbay:
+`PatchbaySetup` runs once per JVM (from `PatchbayTest`'s `@BeforeAll`) against an empty Patchbay. Every call under `/admin` sends the admin login that `docker-compose.yml` starts Patchbay with (`MAPPER_ADMIN_USER`/`MAPPER_ADMIN_PASSWORD`; `Http` adds it unless a test sends its own `Authorization`):
 
 1. It imports each swagger file in `mock/__files/openapi/<api>.yaml` by URL (`POST /admin/api/contracts`). WireMock serves these at `/openapi/<api>.yaml`. The WSDLs listed under `wsdlContracts` in `environment.json` are imported the same way from `/wsdl/<api>.wsdl`; Patchbay fetches the XSDs they import from the mock too.
 2. It sets connections from `patchbay/environment.json` (`PUT /admin/api/connections/{id}`). Connections and secrets never travel in packages. Secrets are `MAPPER_SECRET_<SLUG>` in `docker-compose.yml`.
@@ -45,4 +45,4 @@ Each step is recorded instead of thrown. `Patchbay.ensurePublished(slug)` fails 
 
 ## Known Patchbay findings (failing on purpose)
 
-None at the moment: all 210 tests pass against Patchbay with the OpenSpec changes `fix-publish-and-draft-consistency`, `harden-inbound-boundary` and `improve-runtime-capacity-and-operability` applied (Patchbay `fix/publish-and-draft-consistency` at `ec089ce`); `shop-order-whole` (an object linked as a whole) fails to publish on older engines. `ErrorHandlingTest.aVendorThatDoesNotAnswerInTimeGives504` once got 503 from a Spring async request timeout after 0.7 s; the async timeout is now set explicitly and it has not come back, but its cause was not found.
+None at the moment: all 212 tests pass against Patchbay with the OpenSpec change `harden-admin-surface` applied (Patchbay `security/harden-admin-surface` at `f655936`); older engines have no admin login, so the two admin-login tests in `ErrorHandlingTest` fail there; `shop-order-whole` (an object linked as a whole) fails to publish on older engines. `ErrorHandlingTest.aVendorThatDoesNotAnswerInTimeGives504` once got 503 from a Spring async request timeout after 0.7 s; the async timeout is now set explicitly and it has not come back, but its cause was not found.
